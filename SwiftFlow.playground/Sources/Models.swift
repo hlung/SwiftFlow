@@ -1,10 +1,10 @@
 import Foundation
 
-struct Box {
+public struct Box {
   let text: String
 }
 
-struct Link {
+public struct Link {
   let from: Box
   let to: Box
   let text: String

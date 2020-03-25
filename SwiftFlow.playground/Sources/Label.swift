@@ -7,8 +7,9 @@ public class Label: UILabel {
     self.text = text
     self.textColor = .black
     self.backgroundColor = .gray
+//    self.textAlignment = .center
 //    print("label!")
-//    self.translatesAutoresizingMaskIntoConstraints = false
+    self.translatesAutoresizingMaskIntoConstraints = false
   }
 
   override init(frame: CGRect) {
