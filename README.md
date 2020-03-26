@@ -7,6 +7,7 @@
   - syntax is closer to the output than simply declaring all the links
   - allow new line character, no `<br />`
   - shorter arrow sign, e.g. `->` instead of `-->`
+  - `id` comes *after* `name`
 - link (arrow)
   - has annotation
   - can specify preferred arrow direction (up, down, left, right, diagonal?)
