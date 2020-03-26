@@ -1,6 +1,20 @@
 # SwiftFlow
 🚧 Work in progress. 🚧
 
+## Intended Features
+- allow SPACE! in title of non-id boxes
+- allow new line character, no `<br />`
+- compared to mermaid js, syntax is closer to the output than simply declaring all the links
+- link (arrow)
+  - has annotation
+  - can specify preferred arrow direction (up, down, left, right, diagonal?)
+- box 
+  - types: [] rectangle, {} pill, <> diamond, () circle, // slanted, etc.
+  - allow multiline text
+- support bold/italic text
+- support live editing = Xcode playground + Autolayout. SwiftUI live preview is faster but layout is less flexible.
+- can show error = Xcode playground
+
 ## Example
 
 ### Input
