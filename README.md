@@ -3,8 +3,10 @@
 
 ## Intended Features
 - allow SPACE! in title of non-id boxes
-- allow new line character, no `<br />`
-- compared to mermaid js, syntax is closer to the output than simply declaring all the links
+- compared to mermaid js
+  - syntax is closer to the output than simply declaring all the links
+  - allow new line character, no `<br />`
+  - shorter arrow sign, e.g. `->` instead of `-->`
 - link (arrow)
   - has annotation
   - can specify preferred arrow direction (up, down, left, right, diagonal?)
