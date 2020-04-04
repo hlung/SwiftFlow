@@ -48,4 +48,4 @@ swiftflow
 ![Output](images/output.png)
 
 ### Notes
-- I know the SwiftFlow name conflicts with https://github.com/Swift-Kit/Swift-Flow , but I don't care.
+- I know the SwiftFlow name conflicts with https://github.com/Swift-Kit/Swift-Flow , but I don't care :P.
