@@ -19,9 +19,7 @@ public extension UIView {
 public extension Array where Element == UIView {
   func constrainTopToBottom() -> [NSLayoutConstraint] {
     var constraints: [NSLayoutConstraint] = []
-    for i in 0..<self.count - 1 {
-      let firstView = self[i]
-      let secondView = self[i+1]
+    for (firstView, secondView) in allPairs {
       constraints += firstView.bottom(by: secondView)
     }
     return constraints
@@ -29,9 +27,7 @@ public extension Array where Element == UIView {
 
   func constrainTrailingToLeading() -> [NSLayoutConstraint] {
     var constraints: [NSLayoutConstraint] = []
-    for i in 0..<self.count - 1 {
-      let firstView = self[i]
-      let secondView = self[i+1]
+    for (firstView, secondView) in allPairs {
       constraints += firstView.trail(by: secondView)
     }
     return constraints

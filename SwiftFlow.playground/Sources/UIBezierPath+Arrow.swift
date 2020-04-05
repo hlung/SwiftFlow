@@ -12,6 +12,15 @@ public class ArrowParameters {
   }
 }
 
+public extension CAShapeLayer {
+  class func arrow(from: CGPoint, to: CGPoint, parameters: ArrowParameters) -> CAShapeLayer {
+    let path = UIBezierPath.arrow(from: from, to: to, parameters: parameters)
+    let layer = CAShapeLayer()
+    layer.path = path.cgPath
+    return layer
+  }
+}
+
 public extension UIBezierPath {
   static func arrow(from start: CGPoint, to end: CGPoint, parameters: ArrowParameters) -> UIBezierPath {
     let length = hypot(end.x - start.x, end.y - start.y)
