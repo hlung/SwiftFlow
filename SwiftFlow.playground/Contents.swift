@@ -1,9 +1,11 @@
-// TODO: change leading/trailing to left/right
+/* TODO
+ - add arrow label
+ - add Box borders
+ - change leading/trailing to left/right ?
+ */
 
 import UIKit
 import PlaygroundSupport
-
-var constraints: [NSLayoutConstraint] = []
 
 // Customizables
 let graphInnerPadding: CGFloat = 20
@@ -25,6 +27,8 @@ var graphView: UIView = {
   return view
 }()
 
+var constraints: [NSLayoutConstraint] = []
+
 containerView.addSubview(graphView)
 constraints += [
   graphView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
@@ -34,9 +38,9 @@ constraints += [
 let label_start = Box(Label("Start"))
 let label_api_call = Box(Label("API call"))
 let label_success = Box(Label("API\nSuccess?"), type: .diamond)
-let label_yay = Label("Yay")
-//let label_cry = Label("Cry")
-let label_end = Label("End")
+let label_yay = Box(Label("Yay"))
+//let label_cry = Box(Label("Cry"))
+let label_end = Box(Label("End"))
 graphView.addSubview(label_start)
 graphView.addSubview(label_api_call)
 graphView.addSubview(label_success)
@@ -66,11 +70,15 @@ for view in graphView.subviews {
 }
 
 // Move boxes to correct places, so we can draw arrows using absolute coordinates.
-containerView.layoutIfNeeded()
+PlaygroundPage.current.liveView = containerView
+NSLayoutConstraint.activate(constraints)
+graphView.layoutIfNeeded()
 
 print("label_start", label_start.frame)
 print("label_yay", label_yay.frame)
 
+// We are not using autolayout for the arrows.
+// So need to add arrows this AFTER all canstraints are activated and laid out.
 graphView.addArrow(direction: .down, on: [
   label_start,
   label_api_call,
@@ -86,12 +94,10 @@ graphView.addArrow(direction: .down, on: [
 
 // ---------
 
-NSLayoutConstraint.activate(constraints)
-
 //PlaygroundPage.current.needsIndefiniteExecution = true
-PlaygroundPage.current.liveView = containerView
 
-print("Constraint is active: \(constraints.last?.isActive == true)")
+
+//print("Constraint is active: \(constraints.last?.isActive == true)")
 
 public class Box: UIView {
   let subview: UIView
