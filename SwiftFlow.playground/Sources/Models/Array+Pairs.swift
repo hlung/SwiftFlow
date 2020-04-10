@@ -1,7 +1,7 @@
 import Foundation
 
 public extension Array {
-  // Iterate through all elements in pairs
+  // Iterate through all elements in pair tuples
   // e.g. [1, 2, 3, 4].allPairs = [(1, 2), (2, 3), (3, 4)]
   var allPairs: [(Element, Element)] {
     var array: [(Element, Element)] = []
