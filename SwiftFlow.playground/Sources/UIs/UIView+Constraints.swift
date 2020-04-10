@@ -15,18 +15,18 @@ public extension UIView {
     ]
   }
 
-  func constraintsByPuttingInside(_ view: UIView) -> [NSLayoutConstraint] {
-    return [
-      view.topAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.topAnchor),
-      view.leadingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.leadingAnchor),
-      view.trailingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.trailingAnchor),
-      view.bottomAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.bottomAnchor),
-//      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor),
-//      layoutMarginsGuide.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor),
-//      layoutMarginsGuide.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor),
-//      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor),
-    ]
-  }
+//  func constraintsByPuttingInside(_ view: UIView) -> [NSLayoutConstraint] {
+//    return [
+//      view.topAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.topAnchor),
+//      view.leadingAnchor.constraint(lessThanOrEqualTo: layoutMarginsGuide.leadingAnchor),
+//      view.trailingAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.trailingAnchor),
+//      view.bottomAnchor.constraint(greaterThanOrEqualTo: layoutMarginsGuide.bottomAnchor),
+////      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor),
+////      layoutMarginsGuide.leadingAnchor.constraint(lessThanOrEqualTo: view.leadingAnchor),
+////      layoutMarginsGuide.trailingAnchor.constraint(greaterThanOrEqualTo: view.trailingAnchor),
+////      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor),
+//    ]
+//  }
 }
 
 public extension Array where Element == UIView {

@@ -1,6 +1,6 @@
 import UIKit
 
-public class Box: UIView {
+public class BoxView: UIView {
   let view: UIView
   let type: BoxType
 
@@ -22,8 +22,15 @@ public class Box: UIView {
     super.init(frame: .zero)
     self.translatesAutoresizingMaskIntoConstraints = false
     self.backgroundColor = .gray
+    self.setContentHuggingPriority(.required, for: .horizontal)
+    self.setContentHuggingPriority(.required, for: .vertical)
     self.addSubview(view)
     var constraints: [NSLayoutConstraint] = []
+
+    constraints += [
+      centerXAnchor.constraint(equalTo: view.centerXAnchor),
+      centerYAnchor.constraint(equalTo: view.centerYAnchor),
+    ]
 
     switch type {
     case .rect:
