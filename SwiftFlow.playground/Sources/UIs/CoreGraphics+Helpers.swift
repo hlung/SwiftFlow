@@ -7,3 +7,8 @@ public extension CGRect {
   var centerLeft: CGPoint { CGPoint(x: minX, y: midY) }
   var centerRight: CGPoint { CGPoint(x: maxX, y: midY) }
 }
+
+func midPoint(_ pointA: CGPoint, _ pointB: CGPoint) -> CGPoint {
+  return CGPoint(x: (pointA.x + pointB.x) / 2,
+                 y: (pointA.y + pointB.y) / 2)
+}

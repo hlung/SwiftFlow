@@ -13,7 +13,7 @@ let boxPadding: CGFloat = 20
 
 let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
 containerView.backgroundColor = UIColor(red: 0.1, green: 0.6, blue: 0.1, alpha: 1.0)
-//containerView.translatesAutoresizingMaskIntoConstraints = false // don't do this!
+//containerView.translatesAutoresizingMaskIntoConstraints = false // don't add this
 
 var graphView: UIView = {
   let view = UIView()
@@ -87,6 +87,8 @@ graphView.addArrow(direction: .down, on: [
   label_end
 ])
 
+
+
 //graphView.addArrow(direction: .right, on: [
 //  label_success,
 //  label_cry,
@@ -95,79 +97,3 @@ graphView.addArrow(direction: .down, on: [
 // ---------
 
 //PlaygroundPage.current.needsIndefiniteExecution = true
-
-
-//print("Constraint is active: \(constraints.last?.isActive == true)")
-
-public class Box: UIView {
-  let subview: UIView
-  let type: BoxType
-
-  public enum BoxType {
-    case rect
-    case diamond
-  }
-
-  public init(_ view: UIView, type: BoxType = .rect) {
-    self.subview = view
-    self.type = type
-    super.init(frame: .zero)
-    self.translatesAutoresizingMaskIntoConstraints = false
-    self.backgroundColor = .gray
-    self.addSubview(view)
-    var constraints: [NSLayoutConstraint] = []
-
-    switch type {
-    case .rect:
-      view.layoutMargins = UIEdgeInsets(expandingBy: 5)
-      constraints += [
-        topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
-        leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
-        trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
-        bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
-      ]
-      NSLayoutConstraint.activate(constraints)
-
-      self.layer.cornerRadius = 5
-    case .diamond:
-      view.layoutMargins = UIEdgeInsets(top: -view.intrinsicContentSize.width/2,
-                                        left: -view.intrinsicContentSize.height/2,
-                                        bottom: -view.intrinsicContentSize.width/2,
-                                        right: -view.intrinsicContentSize.height/2)
-      constraints += [
-        topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
-        leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
-        trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
-        bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
-      ]
-      NSLayoutConstraint.activate(constraints)
-      self.layoutIfNeeded()
-
-//      print("view.layoutMargins", view.layoutMargins)
-//      print("view.frame", view.frame)
-//      print("self.bounds", self.bounds)
-      let shapeLayer = CAShapeLayer()
-      shapeLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
-      self.layer.mask = shapeLayer
-    }
-
-//    self.layoutIfNeeded()
-//
-//    let shapeLayer = CAShapeLayer()
-//    shapeLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
-//    self.layer.mask = shapeLayer
-
-//    print("view.bounds", view.bounds)
-//    print("bounds", self.bounds)
-  }
-
-//  public override func draw(_ rect: CGRect) {
-//    if self.type == .diamond {
-//
-//    }
-//  }
-
-  required init?(coder: NSCoder) {
-    fatalError("Not implemented")
-  }
-}
