@@ -35,11 +35,11 @@ public struct Box: GraphElement, CustomStringConvertible {
   }
 }
 
-public struct BoxExisting: GraphElement, CustomStringConvertible {
+public struct BoxShortcut: GraphElement, CustomStringConvertible {
   let id: String
 
   public var description: String {
-    return "[BoxExisting id: \(id)]"
+    return "[BoxShortcut id: \(id)]"
   }
 }
 
@@ -101,18 +101,18 @@ graph.addFlow([
   Arrow(direction: .down, title: nil),
   Box(type: .diamond, title: "Success?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
-  Box(type: .rect, title: "Celebrate"),
+  Box(type: .rect, title: "Celebrate!"),
   Arrow(direction: .down, title: nil),
   Box(type: .rect, title: "End", id: "end"),
 ])
 
-//graph.addFlow([
-//  BoxExisting(id: "success"),
-//  Arrow(direction: .right, title: "No"),
-//  Box(type: .diamond, title: "Cry", id: nil),
+graph.addFlow([
+  BoxShortcut(id: "success"),
+  Arrow(direction: .right, title: "No"),
+  Box(type: .rect, title: "Cry"),
 //  Arrow(direction: .down, title: nil),
-//  BoxExisting(id: "end"),
-//])
+//  BoxShortcut(id: "end"),
+])
 
 // --- drawing ---
 
@@ -145,24 +145,43 @@ for flow in graph.flows {
     let e = flow[index]
 
     if let arrow = e as? Arrow, index+1 < flow.count {
-      if let boxBefore = flow[index-1] as? Box, let boxAfter = flow[index+1] as? Box {
 
-//        print(graphView.boxView(with: boxBefore.id))
-        let boxBeforeView = graphView.boxViewWithID(boxBefore.id)
-          ?? BoxView(Label(boxBefore.title), type: boxBefore.type)
-        let boxAfterView = graphView.boxViewWithID(boxAfter.id)
-          ?? BoxView(Label(boxAfter.title), type: boxAfter.type)
-
-        boxBeforeView.id = boxBefore.id
-        boxAfterView.id = boxAfter.id
-
-        graphView.addSubviewIfNeeded(boxBeforeView)
-        graphView.addSubviewIfNeeded(boxAfterView)
-        constraints += boxBeforeView.constraints(direction: arrow.direction,
-                                                 to: boxAfterView)
-
-        print("-- \(boxBefore)\n   \(boxAfter)")
+      let boxViewBefore: BoxView
+      let elementBefore = flow[index-1]
+      if let boxBefore = elementBefore as? Box {
+        boxViewBefore = graphView.boxViewWithID(boxBefore.id) ??
+          BoxView(Label(boxBefore.title), type: boxBefore.type)
+        boxViewBefore.id = boxBefore.id
       }
+      else if let boxShortcutBefore = elementBefore as? BoxShortcut,
+        let view = graphView.boxViewWithID(boxShortcutBefore.id) {
+        boxViewBefore = view
+      }
+      else {
+        fatalError("Cannot find box before arrow")
+      }
+
+      let boxViewAfter: BoxView
+      let elementAfter = flow[index+1]
+      if let boxAfter = elementAfter as? Box {
+        boxViewAfter = graphView.boxViewWithID(boxAfter.id) ??
+          BoxView(Label(boxAfter.title), type: boxAfter.type)
+        boxViewAfter.id = boxAfter.id
+      }
+      else if let boxShortcutAfter = elementAfter as? BoxShortcut,
+        let view = graphView.boxViewWithID(boxShortcutAfter.id) {
+        boxViewAfter = view
+      }
+      else {
+        fatalError("Cannot find box after arrow")
+      }
+
+      graphView.addSubviewIfNeeded(boxViewBefore)
+      graphView.addSubviewIfNeeded(boxViewAfter)
+      constraints += boxViewBefore.constraints(direction: arrow.direction,
+                                               to: boxViewAfter)
+
+//      print("-- \(boxBefore)\n   \(boxAfter)")
     }
   }
 }
@@ -177,8 +196,12 @@ for flow in graph.flows {
 
 // Move boxes to correct places, so we can draw arrows using absolute coordinates.
 PlaygroundPage.current.liveView = containerView
-NSLayoutConstraint.activate(constraints)
 
+NSLayoutConstraint.activate(constraints)
+print("constraints:")
+print(constraints.map{ $0.description }.joined(separator: "\n"))
+print("")
+print("graphView.subviews:")
 print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 
 // We are not using autolayout for the arrows.
