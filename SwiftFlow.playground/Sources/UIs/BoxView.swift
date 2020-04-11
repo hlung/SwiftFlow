@@ -25,8 +25,8 @@ public class BoxView: UIView {
     self.setContentHuggingPriority(.required, for: .horizontal)
     self.setContentHuggingPriority(.required, for: .vertical)
     self.addSubview(view)
-    var constraints: [NSLayoutConstraint] = []
 
+    var constraints: [NSLayoutConstraint] = []
     constraints += [
       centerXAnchor.constraint(equalTo: view.centerXAnchor),
       centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -41,9 +41,6 @@ public class BoxView: UIView {
         trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
         bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
       ]
-      NSLayoutConstraint.activate(constraints)
-
-      self.layer.cornerRadius = rectCornerRadius
     case .diamond:
       view.layoutMargins = UIEdgeInsets(top: -view.intrinsicContentSize.width/2,
                                         left: -view.intrinsicContentSize.height/2,
@@ -55,9 +52,17 @@ public class BoxView: UIView {
         trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
         bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
       ]
-      NSLayoutConstraint.activate(constraints)
-      self.layoutIfNeeded()
+    }
 
+    NSLayoutConstraint.activate(constraints)
+  }
+
+  public override func layoutSubviews() {
+    super.layoutSubviews()
+    switch type {
+    case .rect:
+      self.layer.cornerRadius = rectCornerRadius
+    case .diamond:
       let shapeLayer = CAShapeLayer()
       shapeLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
       self.layer.mask = shapeLayer
