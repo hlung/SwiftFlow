@@ -3,7 +3,9 @@ import UIKit
 public class BoxView: UIView {
   public let view: UIView
   public let type: BoxType
-  public var uuid: String?
+
+  // box
+  public var id: String?
 
   // Customizables
   private let rectLayoutMargins = UIEdgeInsets(top: -10, left: -20,

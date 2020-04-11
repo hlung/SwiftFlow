@@ -22,11 +22,16 @@ public protocol GraphElement {}
 public struct Box: GraphElement, CustomStringConvertible {
   public let type: BoxType
   public let title: String
-  public let id: String?
-  public let uuid: String = UUID().uuidString
+  public let id: String
 
   public var description: String {
-    return "[Box \(type) title: \(title) id: \(id ?? "-")]"
+    return "[Box \(type) title: \(title) id: \(id)]"
+  }
+
+  public init(type: BoxType, title: String, id: String = UUID().uuidString ) {
+    self.type = type
+    self.title = title
+    self.id = id
   }
 }
 
@@ -92,11 +97,11 @@ constraints += [
 let graph = Graph()
 
 graph.addFlow([
-  Box(type: .rect, title: "Start", id: nil),
+  Box(type: .rect, title: "Start"),
   Arrow(direction: .down, title: nil),
   Box(type: .diamond, title: "Success?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
-  Box(type: .rect, title: "Celebrate", id: nil),
+  Box(type: .rect, title: "Celebrate"),
   Arrow(direction: .down, title: nil),
   Box(type: .rect, title: "End", id: "end"),
 ])
@@ -112,18 +117,14 @@ graph.addFlow([
 // --- drawing ---
 
 extension GraphView {
-  public func boxView(with uuid: String) -> BoxView? {
+  public func boxViewWithID(_ id: String) -> BoxView? {
     return self.subviews.first(where: { view in
-//      print("boxView view", view)
-//      print("boxView uuid", (view as? BoxView)?.uuid)
-      if let view = view as? BoxView, view.uuid == uuid { return true }
+      if let view = view as? BoxView, view.id == id { return true }
       else { return false }
     }) as? BoxView
   }
 
   public func addSubviewIfNeeded(_ view: UIView) {
-//    print("addSubviewIfNeeded view", view)
-//    print("addSubviewIfNeeded subviews", self.subviews.first(where: { $0 == view }))
     guard (self.subviews.first(where: { $0 == view }) == nil) else { return }
     super.addSubview(view)
     view.layoutMargins = UIEdgeInsets(expandingBy: subviewPadding)
@@ -146,14 +147,14 @@ for flow in graph.flows {
     if let arrow = e as? Arrow, index+1 < flow.count {
       if let boxBefore = flow[index-1] as? Box, let boxAfter = flow[index+1] as? Box {
 
-//        print(graphView.boxView(with: boxBefore.uuid))
-        let boxBeforeView = graphView.boxView(with: boxBefore.uuid)
+//        print(graphView.boxView(with: boxBefore.id))
+        let boxBeforeView = graphView.boxViewWithID(boxBefore.id)
           ?? BoxView(Label(boxBefore.title), type: boxBefore.type)
-        let boxAfterView = graphView.boxView(with: boxAfter.uuid)
+        let boxAfterView = graphView.boxViewWithID(boxAfter.id)
           ?? BoxView(Label(boxAfter.title), type: boxAfter.type)
 
-        boxBeforeView.uuid = boxBefore.uuid
-        boxAfterView.uuid = boxAfter.uuid
+        boxBeforeView.id = boxBefore.id
+        boxAfterView.id = boxAfter.id
 
         graphView.addSubviewIfNeeded(boxBeforeView)
         graphView.addSubviewIfNeeded(boxAfterView)
