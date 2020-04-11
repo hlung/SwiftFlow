@@ -15,4 +15,8 @@ public class Label: UILabel {
   required init?(coder: NSCoder) {
     super.init(coder: coder)
   }
+
+  public override var description: String {
+    return "[Label frame = \(frame) \"\(text)\"]"
+  }
 }

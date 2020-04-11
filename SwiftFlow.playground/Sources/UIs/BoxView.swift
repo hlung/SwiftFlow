@@ -1,22 +1,16 @@
 import UIKit
 
 public class BoxView: UIView {
-  let view: UIView
-  let type: BoxType
-
-  public enum BoxType {
-    case rect
-    case diamond
-  }
+  public let view: UIView
+  public let type: BoxType
+  public var uuid: String?
 
   // Customizables
-  private let rectLayoutMargins = UIEdgeInsets(top: -10,
-                                               left: -20,
-                                               bottom: -10,
-                                               right: -20)
+  private let rectLayoutMargins = UIEdgeInsets(top: -10, left: -20,
+                                               bottom: -10, right: -20)
   private let rectCornerRadius: CGFloat = 5
 
-  public init(_ view: UIView, type: BoxType = .rect) {
+  public init(_ view: UIView, type: BoxType) {
     self.view = view
     self.type = type
     super.init(frame: .zero)
@@ -71,5 +65,9 @@ public class BoxView: UIView {
 
   required init?(coder: NSCoder) {
     fatalError("Not implemented")
+  }
+
+  public override var description: String {
+    return "[BoxView frame = \(frame), subviews = \(subviews)]"
   }
 }
