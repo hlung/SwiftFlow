@@ -83,3 +83,10 @@ public extension UIEdgeInsets {
     self.init(top: value, left: value, bottom: value, right: value)
   }
 }
+
+public extension NSLayoutConstraint {
+  public func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+    self.priority = priority
+    return self
+  }
+}

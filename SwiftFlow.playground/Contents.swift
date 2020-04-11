@@ -2,6 +2,9 @@
  - add arrow label
  - add Box borders
  - change leading/trailing to left/right ?
+ Extras
+ - all boxes margin constraints ?
+ - check duplicate id
  */
 
 import UIKit
@@ -110,6 +113,8 @@ graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
   Box(type: .rect, title: "Cry"),
+  Arrow(direction: .down, title: "No"),
+  Box(type: .rect, title: "Go home"),
 //  Arrow(direction: .down, title: nil),
 //  BoxShortcut(id: "end"),
 ])
@@ -141,6 +146,8 @@ var prevBox: Box?
 var prevArrow: Arrow?
 //var arrows: [(UIView, UIView)] = []
 for flow in graph.flows {
+  guard flow.count > 0 else { continue }
+
   for index in 1..<flow.count {
     let e = flow[index]
 
@@ -167,6 +174,11 @@ for flow in graph.flows {
         boxViewAfter = graphView.boxViewWithID(boxAfter.id) ??
           BoxView(Label(boxAfter.title), type: boxAfter.type)
         boxViewAfter.id = boxAfter.id
+
+        graphView.addSubviewIfNeeded(boxViewBefore)
+        graphView.addSubviewIfNeeded(boxViewAfter)
+        constraints += boxViewBefore.constraints(direction: arrow.direction,
+                                                 to: boxViewAfter)
       }
       else if let boxShortcutAfter = elementAfter as? BoxShortcut,
         let view = graphView.boxViewWithID(boxShortcutAfter.id) {
@@ -176,10 +188,7 @@ for flow in graph.flows {
         fatalError("Cannot find box after arrow")
       }
 
-      graphView.addSubviewIfNeeded(boxViewBefore)
-      graphView.addSubviewIfNeeded(boxViewAfter)
-      constraints += boxViewBefore.constraints(direction: arrow.direction,
-                                               to: boxViewAfter)
+
 
 //      print("-- \(boxBefore)\n   \(boxAfter)")
     }
@@ -198,10 +207,10 @@ for flow in graph.flows {
 PlaygroundPage.current.liveView = containerView
 
 NSLayoutConstraint.activate(constraints)
-print("constraints:")
+print("constraints: \(constraints.count)")
 print(constraints.map{ $0.description }.joined(separator: "\n"))
 print("")
-print("graphView.subviews:")
+print("graphView.subviews: \(graphView.subviews.count)")
 print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 
 // We are not using autolayout for the arrows.

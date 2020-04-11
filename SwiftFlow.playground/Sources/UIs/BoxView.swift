@@ -20,6 +20,8 @@ public class BoxView: UIView {
     self.backgroundColor = .gray
     self.setContentHuggingPriority(.required, for: .horizontal)
     self.setContentHuggingPriority(.required, for: .vertical)
+//    self.view.setContentHuggingPriority(.required, for: .horizontal)
+//    self.view.setContentHuggingPriority(.required, for: .vertical)
     self.addSubview(view)
 
     var constraints: [NSLayoutConstraint] = []
@@ -71,5 +73,11 @@ public class BoxView: UIView {
 
   public override var description: String {
     return "[BoxView frame = \(frame), subviews = \(subviews)]"
+  }
+
+  public override var intrinsicContentSize: CGSize {
+    view.layoutIfNeeded()
+    return CGSize(width: view.intrinsicContentSize.width - view.layoutMargins.left - view.layoutMargins.right,
+                  height: view.intrinsicContentSize.height - view.layoutMargins.top - view.layoutMargins.bottom)
   }
 }
