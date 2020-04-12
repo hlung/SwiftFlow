@@ -8,85 +8,6 @@
 import UIKit
 import PlaygroundSupport
 
-// --- base model ---
-
-public class Graph {
-  var flows: [[GraphElement]] = []
-  var boxConfig = BoxConfig()
-  var arrowConfig = ArrowConfig()
-
-  func addFlow(_ elements: [GraphElement]) {
-    flows.append(elements)
-  }
-}
-
-public protocol GraphElement {}
-
-public struct Box: GraphElement, CustomStringConvertible {
-  public let shape: BoxShape
-  public let title: String
-  public let id: String
-  public let config: BoxConfig?
-
-  public var description: String {
-    return "[Box \(shape) title: \(title) id: \(id)]"
-  }
-
-  public init(shape: BoxShape,
-              title: String,
-              id: String = UUID().uuidString,
-              config: BoxConfig? = nil) {
-    self.shape = shape
-    self.title = title
-    self.id = id
-    self.config = config
-  }
-}
-
-public struct BoxShortcut: GraphElement, CustomStringConvertible {
-  public let id: String
-
-  public var description: String {
-    return "[BoxShortcut id: \(id)]"
-  }
-}
-
-public struct Arrow: GraphElement, CustomStringConvertible {
-  public let direction: Direction
-  public let title: String?
-  public let config: ArrowConfig?
-
-  public var description: String {
-    return "[Arrow \(direction) title \(title ?? "-")]"
-  }
-
-  public init(direction: Direction,
-              title: String? = nil,
-              config: ArrowConfig? = nil) {
-    self.direction = direction
-    self.title = title
-    self.config = config
-  }
-}
-
-public class ArrowDrawingPlan {
-  public let startView: UIView
-  public let endView: UIView
-  public let arrow: Arrow
-
-  public init(startView: UIView, endView: UIView, arrow: Arrow) {
-    self.startView = startView
-    self.endView = endView
-    self.arrow = arrow
-  }
-}
-
-// --- UI preparation ---
-
-let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
-containerView.backgroundColor = UIColor(hex: "9EFFB6")
-var constraints: [NSLayoutConstraint] = []
-
 // --- data ---
 
 var graph = Graph()
@@ -118,8 +39,12 @@ graph.addFlow([
   BoxShortcut(id: "end"),
 ])
 
-// --- drawing ---
+// --- UI ---
 
+let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
+containerView.backgroundColor = UIColor(hex: "9EFFB6")
+
+var constraints: [NSLayoutConstraint] = []
 let graphView = GraphView()
 graphView.layoutMargins = UIEdgeInsets(shrinkingBy: 20)
 containerView.addSubview(graphView)
@@ -219,6 +144,12 @@ print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 // So need to add arrows this AFTER all canstraints are activated and laid out.
 graphView.layoutIfNeeded()
 
+for plan in arrowDrawingPlans {
+  graphView.addArrow(plan, defaultConfig: graph.arrowConfig)
+}
+
+// --------------
+
 public extension GraphView {
   func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {
     let config = plan.arrow.config ?? defaultConfig
@@ -229,27 +160,29 @@ public extension GraphView {
       let label = Label(title)
       label.font = .systemFont(ofSize: 14)
       addSubview(label)
+      let spacing = config.tailWidth + 1
+      let spacingFromBeginning: CGFloat = 2
       let labelConstraints: [NSLayoutConstraint]
       switch plan.arrow.direction {
       case .up:
         labelConstraints = [
-          label.leftAnchor.constraint(equalTo: startView.centerXAnchor, constant: 3),
-          label.bottomAnchor.constraint(equalTo: startView.topAnchor, constant: -3),
+          label.leftAnchor.constraint(equalTo: startView.centerXAnchor, constant: spacing),
+          label.bottomAnchor.constraint(equalTo: startView.topAnchor, constant: -spacingFromBeginning),
         ]
       case .right:
         labelConstraints = [
-          label.leftAnchor.constraint(equalTo: startView.rightAnchor, constant: 3),
-          label.bottomAnchor.constraint(equalTo: startView.centerYAnchor, constant: -3),
+          label.leftAnchor.constraint(equalTo: startView.rightAnchor, constant: spacingFromBeginning),
+          label.bottomAnchor.constraint(equalTo: startView.centerYAnchor, constant: -spacing),
         ]
       case .down:
         labelConstraints = [
-          label.leftAnchor.constraint(equalTo: startView.centerXAnchor, constant: 3),
-          label.topAnchor.constraint(equalTo: startView.bottomAnchor, constant: 3),
+          label.leftAnchor.constraint(equalTo: startView.centerXAnchor, constant: spacing),
+          label.topAnchor.constraint(equalTo: startView.bottomAnchor, constant: spacingFromBeginning),
         ]
       case .left:
         labelConstraints = [
-          label.rightAnchor.constraint(equalTo: startView.leftAnchor, constant: -3),
-          label.bottomAnchor.constraint(equalTo: startView.centerYAnchor, constant: -3),
+          label.rightAnchor.constraint(equalTo: startView.leftAnchor, constant: -spacingFromBeginning),
+          label.bottomAnchor.constraint(equalTo: startView.centerYAnchor, constant: -spacing),
         ]
       }
       NSLayoutConstraint.activate(labelConstraints)
@@ -278,6 +211,75 @@ public extension GraphView {
   }
 }
 
-for plan in arrowDrawingPlans {
-  graphView.addArrow(plan, defaultConfig: graph.arrowConfig)
+// --- base model ---
+
+public class Graph {
+  var flows: [[GraphElement]] = []
+  var boxConfig = BoxConfig()
+  var arrowConfig = ArrowConfig()
+
+  func addFlow(_ elements: [GraphElement]) {
+    flows.append(elements)
+  }
+}
+
+public protocol GraphElement {}
+
+public struct Box: GraphElement, CustomStringConvertible {
+  public let shape: BoxShape
+  public let title: String
+  public let id: String
+  public let config: BoxConfig?
+
+  public var description: String {
+    return "[Box \(shape) title: \(title) id: \(id)]"
+  }
+
+  public init(shape: BoxShape,
+              title: String,
+              id: String = UUID().uuidString,
+              config: BoxConfig? = nil) {
+    self.shape = shape
+    self.title = title
+    self.id = id
+    self.config = config
+  }
+}
+
+public struct BoxShortcut: GraphElement, CustomStringConvertible {
+  public let id: String
+
+  public var description: String {
+    return "[BoxShortcut id: \(id)]"
+  }
+}
+
+public struct Arrow: GraphElement, CustomStringConvertible {
+  public let direction: Direction
+  public let title: String?
+  public let config: ArrowConfig?
+
+  public var description: String {
+    return "[Arrow \(direction) title \(title ?? "-")]"
+  }
+
+  public init(direction: Direction,
+              title: String? = nil,
+              config: ArrowConfig? = nil) {
+    self.direction = direction
+    self.title = title
+    self.config = config
+  }
+}
+
+public class ArrowDrawingPlan {
+  public let startView: UIView
+  public let endView: UIView
+  public let arrow: Arrow
+
+  public init(startView: UIView, endView: UIView, arrow: Arrow) {
+    self.startView = startView
+    self.endView = endView
+    self.arrow = arrow
+  }
 }
