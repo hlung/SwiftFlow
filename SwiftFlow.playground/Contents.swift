@@ -28,15 +28,20 @@ public struct Box: GraphElement, CustomStringConvertible {
   public let shape: BoxShape
   public let title: String
   public let id: String
+  public let config: BoxConfig
 
   public var description: String {
     return "[Box \(shape) title: \(title) id: \(id)]"
   }
 
-  public init(shape: BoxShape, title: String, id: String = UUID().uuidString ) {
+  public init(shape: BoxShape,
+              title: String,
+              id: String = UUID().uuidString,
+              config: BoxConfig = .default) {
     self.shape = shape
     self.title = title
     self.id = id
+    self.config = config
   }
 }
 
@@ -119,12 +124,15 @@ constraints += [
  :: end
  */
 
+var boxConfig = BoxConfig.default
+boxConfig.backgroundColor = UIColor(hex: "A8DEFF")!
+
 let graph = Graph()
 
 graph.addFlow([
   Box(shape: .pill, title: "Start"),
   Arrow(direction: .down),
-  Box(shape: .diamond, title: "Success?", id: "success"),
+  Box(shape: .diamond, title: "Success?", id: "success", config: boxConfig),
   Arrow(direction: .down, title: "Yes"),
   Box(shape: .rect, title: "Throw party!"),
   Arrow(direction: .down),
@@ -184,6 +192,7 @@ for flow in graph.flows {
         }
         else {
           boxViewBefore = BoxView(Label(boxBefore.title), shape: boxBefore.shape)
+          boxViewBefore.backgroundColor = boxBefore.config.backgroundColor
           boxViewBefore.id = boxBefore.id
           graphView.addSubviewIfNeeded(boxViewBefore)
           boxViewBeforeIsNew = true
@@ -206,6 +215,7 @@ for flow in graph.flows {
         }
         else {
           boxViewAfter = BoxView(Label(boxAfter.title), shape: boxAfter.shape)
+          boxViewAfter.backgroundColor = boxAfter.config.backgroundColor
           boxViewAfter.id = boxAfter.id
           graphView.addSubviewIfNeeded(boxViewAfter)
           boxViewAfterIsNew = true
