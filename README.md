@@ -1,7 +1,7 @@
 # SwiftFlow
 🚧 Work in progress. 🚧
 
-## Intended Features
+## Improvements over [mermaid](https://mermaidjs.github.io/#/)
 - allow SPACE! in title of non-id boxes (nodes)
 - compared to mermaid js
   - syntax is closer to the output than simply declaring all the links
@@ -9,13 +9,12 @@
   - shorter arrow sign, e.g. `v` or `>` instead of `-->`
   - `id` comes *after* `name`
   - better loop back over old boxes
-- link (arrow)
+- arrow
   - has annotation
   - can specify preferred arrow direction (up, down, left, right, diagonal?)
-- box 
+- box
   - types: `[]` rectangle, `()` pill, `<>` diamond, `//` slanted, etc.
   - allow multiline text
-- support bold/italic text
 - support live editing = Xcode playground + Autolayout. SwiftUI live preview is faster but layout is less flexible.
 - can show error = Xcode playground
 
