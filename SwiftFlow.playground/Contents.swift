@@ -26,16 +26,16 @@ public class Graph {
 public protocol GraphElement {}
 
 public struct Box: GraphElement, CustomStringConvertible {
-  public let type: BoxType
+  public let shape: BoxShape
   public let title: String
   public let id: String
 
   public var description: String {
-    return "[Box \(type) title: \(title) id: \(id)]"
+    return "[Box \(shape) title: \(title) id: \(id)]"
   }
 
-  public init(type: BoxType, title: String, id: String = UUID().uuidString ) {
-    self.type = type
+  public init(shape: BoxShape, title: String, id: String = UUID().uuidString ) {
+    self.shape = shape
     self.title = title
     self.id = id
   }
@@ -90,7 +90,7 @@ constraints += [
 /*
  -----------------
  Markdown legend:
- [], <>, () = box type
+ [], <>, () = box shape
  :: = box shortcut
  v  = arrow down
  >  = arrow right
@@ -116,21 +116,21 @@ constraints += [
 let graph = Graph()
 
 graph.addFlow([
-  Box(type: .rect, title: "Start"),
+  Box(shape: .rect, title: "Start"),
   Arrow(direction: .down, title: nil),
-  Box(type: .diamond, title: "Success?", id: "success"),
+  Box(shape: .diamond, title: "Success?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
-  Box(type: .rect, title: "Throw party!"),
+  Box(shape: .rect, title: "Throw party!"),
   Arrow(direction: .down, title: nil),
-  Box(type: .rect, title: "End", id: "end"),
+  Box(shape: .rect, title: "End", id: "end"),
 ])
 
 graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
-  Box(type: .rect, title: "Cry"),
+  Box(shape: .rect, title: "Cry"),
   Arrow(direction: .down, title: "No"),
-  Box(type: .rect, title: "Go home"),
+  Box(shape: .rect, title: "Go home"),
   Arrow(direction: .down, title: nil),
   BoxShortcut(id: "end"),
 ])
@@ -177,7 +177,7 @@ for flow in graph.flows {
           boxViewBefore = existing
         }
         else {
-          boxViewBefore = BoxView(Label(boxBefore.title), type: boxBefore.type)
+          boxViewBefore = BoxView(Label(boxBefore.title), shape: boxBefore.shape)
           boxViewBefore.id = boxBefore.id
           graphView.addSubviewIfNeeded(boxViewBefore)
           boxViewBeforeIsNew = true
@@ -199,7 +199,7 @@ for flow in graph.flows {
           boxViewAfter = existing
         }
         else {
-          boxViewAfter = BoxView(Label(boxAfter.title), type: boxAfter.type)
+          boxViewAfter = BoxView(Label(boxAfter.title), shape: boxAfter.shape)
           boxViewAfter.id = boxAfter.id
           graphView.addSubviewIfNeeded(boxViewAfter)
           boxViewAfterIsNew = true

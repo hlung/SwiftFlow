@@ -1,6 +1,6 @@
 import Foundation
 
-public enum BoxType {
+public enum BoxShape {
   case rect
   case diamond
 }

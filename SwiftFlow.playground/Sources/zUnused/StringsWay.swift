@@ -47,14 +47,14 @@
 //"""
 
 //public struct Box: CustomStringConvertible {
-//  // BoxType (first two characters)
+//  // BoxShape (first two characters)
 //  // |  Title (all strings until end of line or :: )
 //  // |  |        ID (optional, all strings until end)
 //  // |  |        |
 //  // v  v        v
 //  // () Title :: id
 //
-//  public enum BoxType {
+//  public enum BoxShape {
 //    case rect
 //    case diamond
 //
@@ -72,13 +72,13 @@
 //    case invalidType
 //  }
 //
-//  let type: BoxType
+//  let type: BoxShape
 //  let title: String
 //  let id: String?
 //
 //  init(string: String) throws {
 //    var s = string
-//    guard let rawType = s.pull(2), let type = BoxType(rawType: rawType) else { throw InitError.invalidType }
+//    guard let rawType = s.pull(2), let type = BoxShape(rawType: rawType) else { throw InitError.invalidType }
 //    self.type = type
 //
 //    self.title = "Hello"

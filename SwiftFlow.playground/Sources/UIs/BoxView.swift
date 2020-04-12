@@ -2,7 +2,7 @@ import UIKit
 
 public class BoxView: UIView {
   public let view: UIView
-  public let type: BoxType
+  public let shape: BoxShape
 
   // box
   public var id: String?
@@ -12,9 +12,9 @@ public class BoxView: UIView {
                                                bottom: -5, right: -10)
   private let rectCornerRadius: CGFloat = 5
 
-  public init(_ view: UIView, type: BoxType) {
+  public init(_ view: UIView, shape: BoxShape) {
     self.view = view
-    self.type = type
+    self.shape = shape
     super.init(frame: .zero)
     self.translatesAutoresizingMaskIntoConstraints = false
     self.backgroundColor = .gray
@@ -30,7 +30,7 @@ public class BoxView: UIView {
       centerYAnchor.constraint(equalTo: view.centerYAnchor),
     ]
 
-    switch type {
+    switch shape {
     case .rect:
       view.layoutMargins = rectLayoutMargins
       constraints += [
@@ -57,7 +57,7 @@ public class BoxView: UIView {
 
   public override func layoutSubviews() {
     super.layoutSubviews()
-    switch type {
+    switch shape {
     case .rect:
       self.layer.cornerRadius = rectCornerRadius
     case .diamond:
