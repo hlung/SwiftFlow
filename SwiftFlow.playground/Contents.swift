@@ -55,6 +55,18 @@ public struct Arrow: GraphElement, CustomStringConvertible {
   }
 }
 
+public class ArrowDrawingPlan {
+  public let startView: UIView
+  public let endView: UIView
+  public let arrow: Arrow
+
+  public init(startView: UIView, endView: UIView, arrow: Arrow) {
+    self.startView = startView
+    self.endView = endView
+    self.arrow = arrow
+  }
+}
+
 // --- UI preparation ---
 
 let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
@@ -144,7 +156,7 @@ extension GraphView {
 
 var prevBox: Box?
 var prevArrow: Arrow?
-//var arrows: [(UIView, UIView)] = []
+var arrowDrawingPlans: [ArrowDrawingPlan] = []
 for flow in graph.flows {
   guard flow.count > 0 else { continue }
 
@@ -202,18 +214,15 @@ for flow in graph.flows {
                                                  to: boxViewAfter)
       }
 
+      let plan = ArrowDrawingPlan(startView: boxViewBefore,
+                                  endView: boxViewAfter,
+                                  arrow: arrow)
+      arrowDrawingPlans.append(plan)
+
 //      print("-- \(boxBefore)\n   \(boxAfter)")
     }
   }
 }
-
-//constraints += [
-//  label_start,
-//  label_api_call,
-//  label_success,
-//  label_yay,
-//  label_end
-//  ].constrainTopToBottom()
 
 // Move boxes to correct places, so we can draw arrows using absolute coordinates.
 PlaygroundPage.current.liveView = containerView
@@ -225,16 +234,43 @@ print("")
 print("graphView.subviews: \(graphView.subviews.count)")
 print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 
+// --- arrows ---
 // We are not using autolayout for the arrows.
 // So need to add arrows this AFTER all canstraints are activated and laid out.
-//graphView.layoutIfNeeded()
-//graphView.addArrow(direction: .down, on: [
-//  label_start,
-//  label_api_call,
-//  label_success,
-//  label_yay,
-//  label_end
-//])
+graphView.layoutIfNeeded()
+
+public extension UIView {
+  func addArrowLayer(with plan: ArrowDrawingPlan) {
+    let parameters = ArrowParameters(tailWidth: 2, headWidth: 7, headLength: 7)
+    let startView: UIView = plan.startView
+    let endView: UIView = plan.endView
+
+    let layer: CAShapeLayer
+    switch plan.arrow.direction {
+    case .up:
+      layer = CAShapeLayer.arrow(from: startView.frame.centerTop,
+                                 to: endView.frame.centerBottom,
+                                 parameters: parameters)
+    case .right:
+      layer = CAShapeLayer.arrow(from: startView.frame.centerRight,
+                                 to: endView.frame.centerLeft,
+                                 parameters: parameters)
+    case .down:
+      layer = CAShapeLayer.arrow(from: startView.frame.centerBottom,
+                                 to: endView.frame.centerTop,
+                                 parameters: parameters)
+    case .left:
+      layer = CAShapeLayer.arrow(from: startView.frame.centerLeft,
+                                 to: endView.frame.centerRight,
+                                 parameters: parameters)
+    }
+    self.layer.addSublayer(layer)
+  }
+}
+
+for plan in arrowDrawingPlans {
+  graphView.addArrowLayer(with: plan)
+}
 
 //graphView.addArrow(direction: .right, on: [
 //  label_success,
