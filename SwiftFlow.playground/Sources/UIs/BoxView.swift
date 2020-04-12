@@ -6,15 +6,17 @@ public class BoxView: UIView {
 
   // box
   public var id: String?
+  public let config: BoxConfig
 
   // Customizables
 
-  public init(_ view: UIView, shape: BoxShape) {
+  public init(_ view: UIView, shape: BoxShape, config: BoxConfig) {
     self.view = view
     self.shape = shape
+    self.config = config
     super.init(frame: .zero)
     self.translatesAutoresizingMaskIntoConstraints = false
-    self.backgroundColor = .clear
+    self.backgroundColor = self.config.backgroundColor
     self.setContentHuggingPriority(.required, for: .horizontal)
     self.setContentHuggingPriority(.required, for: .vertical)
     self.addSubview(view)

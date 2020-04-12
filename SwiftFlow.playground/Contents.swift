@@ -87,7 +87,6 @@ let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500
 containerView.backgroundColor = UIColor(hex: "9EFFB6")
 let graphView = GraphView()
 graphView.layoutMargins = UIEdgeInsets(shrinkingBy: 20)
-graphView.subviewPadding = 20
 
 var constraints: [NSLayoutConstraint] = []
 
@@ -108,6 +107,9 @@ graph.boxConfig = blueBoxConfig
 var redBoxConfig = BoxConfig()
 redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
 
+var goHomeBoxConfig = blueBoxConfig
+//goHomeBoxConfig.edgeOffsets = EdgeOffsets(allSides: 50)
+
 graph.addFlow([
   Box(shape: .pill, title: "Start"),
   Arrow(direction: .down),
@@ -122,8 +124,8 @@ graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
   Box(shape: .rect, title: "Cry", config: redBoxConfig),
-  Arrow(direction: .down, config: ArrowConfig()),
-  Box(shape: .rect, title: "Go home"),
+  Arrow(direction: .down),
+  Box(shape: .rect, title: "Go home", config: goHomeBoxConfig),
   Arrow(direction: .down),
   BoxShortcut(id: "end"),
 ])
@@ -138,14 +140,15 @@ public extension GraphView {
     }) as? BoxView
   }
 
-  func addSubviewIfNeeded(_ view: UIView) {
-    super.addSubview(view)
-    view.layoutMargins = UIEdgeInsets(expandingBy: subviewPadding)
+  func addBoxView(_ boxView: BoxView) {
+    super.addSubview(boxView)
+
+    // Graph - Box constraints
     NSLayoutConstraint.activate([
-      topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
-      leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
-      bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
-      trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
+      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: boxView.topAnchor),
+      layoutMarginsGuide.leftAnchor.constraint(lessThanOrEqualTo: boxView.leftAnchor),
+      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: boxView.bottomAnchor),
+      layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: boxView.rightAnchor),
     ])
   }
 }
@@ -159,7 +162,6 @@ for flow in graph.flows {
     let e = flow[index]
 
     if let arrow = e as? Arrow, index+1 < flow.count {
-
       // Box before
       let boxViewBefore: BoxView
       var boxViewBeforeIsNew = false
@@ -169,11 +171,10 @@ for flow in graph.flows {
           boxViewBefore = existing
         }
         else {
-          boxViewBefore = BoxView(Label(boxBefore.title), shape: boxBefore.shape)
-          boxViewBefore.backgroundColor = boxBefore.config?.backgroundColor
-            ?? graph.boxConfig.backgroundColor
+          let config = boxBefore.config ?? graph.boxConfig
+          boxViewBefore = BoxView(Label(boxBefore.title), shape: boxBefore.shape, config: config)
           boxViewBefore.id = boxBefore.id
-          graphView.addSubviewIfNeeded(boxViewBefore)
+          graphView.addBoxView(boxViewBefore)
           boxViewBeforeIsNew = true
         }
       }
@@ -194,11 +195,10 @@ for flow in graph.flows {
           boxViewAfter = existing
         }
         else {
-          boxViewAfter = BoxView(Label(boxAfter.title), shape: boxAfter.shape)
-          boxViewAfter.backgroundColor = boxAfter.config?.backgroundColor
-            ?? graph.boxConfig.backgroundColor
+          let config = boxAfter.config ?? graph.boxConfig
+          boxViewAfter = BoxView(Label(boxAfter.title), shape: boxAfter.shape, config: config)
           boxViewAfter.id = boxAfter.id
-          graphView.addSubviewIfNeeded(boxViewAfter)
+          graphView.addBoxView(boxViewAfter)
           boxViewAfterIsNew = true
         }
       }
@@ -212,18 +212,18 @@ for flow in graph.flows {
 
       // Add constraints and arrows
       if boxViewBeforeIsNew || boxViewAfterIsNew {
-        let extraSpace = arrow.config?.extraSpace ?? graph.arrowConfig.extraSpace
+        let offset = EdgeOffsets.offset(from: boxViewBefore.config.edgeOffsets,
+                                        to: boxViewAfter.config.edgeOffsets,
+                                        direction: arrow.direction)
         constraints += boxViewBefore.constraints(direction: arrow.direction,
                                                  to: boxViewAfter,
-                                                 extraSpace: extraSpace)
+                                                 offset: offset)
       }
 
       let plan = ArrowDrawingPlan(startView: boxViewBefore,
                                   endView: boxViewAfter,
                                   arrow: arrow)
       arrowDrawingPlans.append(plan)
-
-//      print("-- \(boxBefore)\n   \(boxAfter)")
     }
   }
 }

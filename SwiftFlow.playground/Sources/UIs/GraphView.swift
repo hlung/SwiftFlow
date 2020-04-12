@@ -2,8 +2,6 @@ import UIKit
 
 public class GraphView: UIView {
 
-  public var subviewPadding: CGFloat = 20
-
   public init() {
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
