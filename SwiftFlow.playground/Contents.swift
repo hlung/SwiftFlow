@@ -85,16 +85,7 @@ public class ArrowDrawingPlan {
 
 let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
 containerView.backgroundColor = UIColor(hex: "9EFFB6")
-let graphView = GraphView()
-graphView.layoutMargins = UIEdgeInsets(shrinkingBy: 20)
-
 var constraints: [NSLayoutConstraint] = []
-
-containerView.addSubview(graphView)
-constraints += [
-  graphView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-  graphView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
-]
 
 // --- data ---
 
@@ -106,9 +97,6 @@ graph.boxConfig = blueBoxConfig
 
 var redBoxConfig = BoxConfig()
 redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
-
-var goHomeBoxConfig = blueBoxConfig
-//goHomeBoxConfig.edgeOffsets = EdgeOffsets(allSides: 50)
 
 graph.addFlow([
   Box(shape: .pill, title: "Start"),
@@ -125,33 +113,20 @@ graph.addFlow([
   Arrow(direction: .right, title: "No"),
   Box(shape: .rect, title: "Cry", config: redBoxConfig),
   Arrow(direction: .down),
-  Box(shape: .rect, title: "Go home", config: goHomeBoxConfig),
+  Box(shape: .rect, title: "Go home"),
   Arrow(direction: .down),
   BoxShortcut(id: "end"),
 ])
 
 // --- drawing ---
 
-public extension GraphView {
-  func boxViewWithID(_ id: String) -> BoxView? {
-    return self.subviews.first(where: { view in
-      if let view = view as? BoxView, view.id == id { return true }
-      else { return false }
-    }) as? BoxView
-  }
-
-  func addBoxView(_ boxView: BoxView) {
-    super.addSubview(boxView)
-
-    // Graph - Box constraints
-    NSLayoutConstraint.activate([
-      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: boxView.topAnchor),
-      layoutMarginsGuide.leftAnchor.constraint(lessThanOrEqualTo: boxView.leftAnchor),
-      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: boxView.bottomAnchor),
-      layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: boxView.rightAnchor),
-    ])
-  }
-}
+let graphView = GraphView()
+graphView.layoutMargins = UIEdgeInsets(shrinkingBy: 20)
+containerView.addSubview(graphView)
+constraints += [
+  graphView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+  graphView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+]
 
 var arrowDrawingPlans: [ArrowDrawingPlan] = []
 
@@ -230,7 +205,7 @@ for flow in graph.flows {
 
 // Move boxes to correct places, so we can draw arrows using absolute coordinates.
 PlaygroundPage.current.liveView = containerView
-PlaygroundPage.current.needsIndefiniteExecution = true
+//PlaygroundPage.current.needsIndefiniteExecution = true
 
 NSLayoutConstraint.activate(constraints)
 print("constraints: \(constraints.count)")
@@ -244,9 +219,9 @@ print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 // So need to add arrows this AFTER all canstraints are activated and laid out.
 graphView.layoutIfNeeded()
 
-public extension UIView {
-  func addArrow(_ plan: ArrowDrawingPlan) {
-    let config = ArrowConfig()
+public extension GraphView {
+  func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {
+    let config = plan.arrow.config ?? defaultConfig
     let startView: UIView = plan.startView
     let endView: UIView = plan.endView
 
@@ -304,5 +279,5 @@ public extension UIView {
 }
 
 for plan in arrowDrawingPlans {
-  graphView.addArrow(plan)
+  graphView.addArrow(plan, defaultConfig: graph.arrowConfig)
 }
