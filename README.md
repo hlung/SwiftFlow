@@ -21,31 +21,40 @@
 
 ## Example
 
-### Input
+### Input Swift code
+```swift
+var graph = Graph()
+
+var blueBoxConfig = BoxConfig.default
+blueBoxConfig.backgroundColor = UIColor(hex: "9EE5FF")!
+graph.boxConfig = blueBoxConfig
+
+var redBoxConfig = BoxConfig.default
+redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
+
+graph.addFlow([
+  Box(shape: .pill, title: "Start"),
+  Arrow(direction: .down),
+  Box(shape: .diamond, title: "Work\nsuccess?", id: "success"),
+  Arrow(direction: .down, title: "Yes"),
+  Box(shape: .rect, title: "Go Party!"),
+  Arrow(direction: .down),
+  Box(shape: .pill, title: "End", id: "end"),
+])
+
+graph.addFlow([
+  BoxShortcut(id: "success"),
+  Arrow(direction: .right, title: "No"),
+  Box(shape: .rect, title: "Cry", config: redBoxConfig),
+  Arrow(direction: .down, extraSpace: 10),
+  Box(shape: .rect, title: "Go home"),
+  Arrow(direction: .down),
+  BoxShortcut(id: "end"),
+])
 ```
-swiftflow
-  () Start
-  v
-  [] API Client receives responses
-  v
-  <> Success?
-  -YES-> Handle success :: result_yes, Direction.right
-  -NO-> Handle failure :: result_no
-
-  result_yes
-  v
-  [] Print Yay
-
-  result_no
-  v
-  [] Print Cry
-
-  vv
-  () End
-  ```
   
-### Output
-![Output](images/output.png)
+### Output Flowchart
+![Output](images/output2.png)
 
 ### Notes
 - I know the SwiftFlow name conflicts with https://github.com/Swift-Kit/Swift-Flow , but I don't care :P.
