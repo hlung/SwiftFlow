@@ -95,31 +95,6 @@ constraints += [
 ]
 
 // --- data ---
-/*
- -----------------
- Markdown legend:
- [], <>, () = box shape
- :: = box shortcut
- v  = arrow down
- >  = arrow right
- -----------------
-
- () Start
- v
- <> Success? :: success
- v Yes
- [] Throw party!
- v
- () End :: end
-
- :: success
- > No
- [] Cry
- v
- [] Go home
- v
- :: end
- */
 
 var graph = Graph()
 
@@ -152,16 +127,15 @@ graph.addFlow([
 
 // --- drawing ---
 
-extension GraphView {
-  public func boxViewWithID(_ id: String) -> BoxView? {
+public extension GraphView {
+  func boxViewWithID(_ id: String) -> BoxView? {
     return self.subviews.first(where: { view in
       if let view = view as? BoxView, view.id == id { return true }
       else { return false }
     }) as? BoxView
   }
 
-  public func addSubviewIfNeeded(_ view: UIView) {
-    //guard (self.subviews.first(where: { $0 == view }) == nil) else { return }
+  func addSubviewIfNeeded(_ view: UIView) {
     super.addSubview(view)
     view.layoutMargins = UIEdgeInsets(expandingBy: subviewPadding)
     NSLayoutConstraint.activate([
