@@ -1,8 +1,4 @@
 /* TODO
- //- add arrow label
- //- pill shape box
- - box borders
- - box background color
  - change leading/trailing to left/right ?
  Extras
  - add errors: check duplicate id
@@ -16,6 +12,7 @@ import PlaygroundSupport
 
 public class Graph {
   var flows: [[GraphElement]] = []
+  var boxConfig = BoxConfig.default
 
   func addFlow(_ elements: [GraphElement]) {
     flows.append(elements)
@@ -28,7 +25,7 @@ public struct Box: GraphElement, CustomStringConvertible {
   public let shape: BoxShape
   public let title: String
   public let id: String
-  public let config: BoxConfig
+  public let config: BoxConfig?
 
   public var description: String {
     return "[Box \(shape) title: \(title) id: \(id)]"
@@ -37,7 +34,7 @@ public struct Box: GraphElement, CustomStringConvertible {
   public init(shape: BoxShape,
               title: String,
               id: String = UUID().uuidString,
-              config: BoxConfig = .default) {
+              config: BoxConfig? = nil) {
     self.shape = shape
     self.title = title
     self.id = id
@@ -84,7 +81,7 @@ public class ArrowDrawingPlan {
 // --- UI preparation ---
 
 let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
-containerView.backgroundColor = UIColor(red: 0.1, green: 0.6, blue: 0.1, alpha: 1.0)
+containerView.backgroundColor = UIColor(hex: "9EFFB6")
 let graphView = GraphView()
 graphView.layoutMargins = UIEdgeInsets(shrinkingBy: 20)
 graphView.subviewPadding = 20
@@ -124,17 +121,21 @@ constraints += [
  :: end
  */
 
-var boxConfig = BoxConfig.default
-boxConfig.backgroundColor = UIColor(hex: "A8DEFF")!
+var graph = Graph()
 
-let graph = Graph()
+var blueBoxConfig = BoxConfig.default
+blueBoxConfig.backgroundColor = UIColor(hex: "9EE5FF")!
+graph.boxConfig = blueBoxConfig
+
+var redBoxConfig = BoxConfig.default
+redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
 
 graph.addFlow([
   Box(shape: .pill, title: "Start"),
   Arrow(direction: .down),
-  Box(shape: .diamond, title: "Success?", id: "success", config: boxConfig),
+  Box(shape: .diamond, title: "Work\nsuccess?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
-  Box(shape: .rect, title: "Throw party!"),
+  Box(shape: .rect, title: "Go Party!"),
   Arrow(direction: .down),
   Box(shape: .pill, title: "End", id: "end"),
 ])
@@ -142,7 +143,7 @@ graph.addFlow([
 graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
-  Box(shape: .rect, title: "Cry"),
+  Box(shape: .rect, title: "Cry", config: redBoxConfig),
   Arrow(direction: .down, extraSpace: 10),
   Box(shape: .rect, title: "Go home"),
   Arrow(direction: .down),
@@ -183,6 +184,7 @@ for flow in graph.flows {
 
     if let arrow = e as? Arrow, index+1 < flow.count {
 
+      // Box before
       let boxViewBefore: BoxView
       var boxViewBeforeIsNew = false
       let elementBefore = flow[index-1]
@@ -192,7 +194,8 @@ for flow in graph.flows {
         }
         else {
           boxViewBefore = BoxView(Label(boxBefore.title), shape: boxBefore.shape)
-          boxViewBefore.backgroundColor = boxBefore.config.backgroundColor
+          boxViewBefore.backgroundColor = boxBefore.config?.backgroundColor
+            ?? graph.boxConfig.backgroundColor
           boxViewBefore.id = boxBefore.id
           graphView.addSubviewIfNeeded(boxViewBefore)
           boxViewBeforeIsNew = true
@@ -206,6 +209,7 @@ for flow in graph.flows {
         fatalError("Cannot find box before arrow")
       }
 
+      // Box after
       let boxViewAfter: BoxView
       var boxViewAfterIsNew = false
       let elementAfter = flow[index+1]
@@ -215,7 +219,8 @@ for flow in graph.flows {
         }
         else {
           boxViewAfter = BoxView(Label(boxAfter.title), shape: boxAfter.shape)
-          boxViewAfter.backgroundColor = boxAfter.config.backgroundColor
+          boxViewAfter.backgroundColor = boxAfter.config?.backgroundColor
+            ?? graph.boxConfig.backgroundColor
           boxViewAfter.id = boxAfter.id
           graphView.addSubviewIfNeeded(boxViewAfter)
           boxViewAfterIsNew = true
@@ -229,6 +234,7 @@ for flow in graph.flows {
         fatalError("Cannot find box after arrow")
       }
 
+      // Add constraints and arrows
       if boxViewBeforeIsNew || boxViewAfterIsNew {
         constraints += boxViewBefore.constraints(direction: arrow.direction,
                                                  to: boxViewAfter,

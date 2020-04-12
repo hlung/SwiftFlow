@@ -10,6 +10,8 @@ public class Label: UILabel {
     self.textAlignment = .center
     self.font = .systemFont(ofSize: 16)
     self.translatesAutoresizingMaskIntoConstraints = false
+    self.setContentCompressionResistancePriority(.required, for: .horizontal)
+    self.setContentCompressionResistancePriority(.required, for: .vertical)
   }
 
   required init?(coder: NSCoder) {
