@@ -5,7 +5,7 @@ public class Label: UILabel {
     super.init(frame: .zero)
     self.text = text
     self.textColor = .black
-    self.backgroundColor = .lightGray
+    self.backgroundColor = .clear
     self.numberOfLines = 0
     self.textAlignment = .center
     self.font = .systemFont(ofSize: 16)

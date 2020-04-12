@@ -237,6 +237,7 @@ for flow in graph.flows {
 
 // Move boxes to correct places, so we can draw arrows using absolute coordinates.
 PlaygroundPage.current.liveView = containerView
+PlaygroundPage.current.needsIndefiniteExecution = true
 
 NSLayoutConstraint.activate(constraints)
 print("constraints: \(constraints.count)")
@@ -319,5 +320,3 @@ for plan in arrowDrawingPlans {
 //])
 
 // ---------
-
-//PlaygroundPage.current.needsIndefiniteExecution = true

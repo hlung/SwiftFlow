@@ -14,7 +14,7 @@ public class BoxView: UIView {
     self.shape = shape
     super.init(frame: .zero)
     self.translatesAutoresizingMaskIntoConstraints = false
-    self.backgroundColor = .gray
+    self.backgroundColor = .clear
     self.setContentHuggingPriority(.required, for: .horizontal)
     self.setContentHuggingPriority(.required, for: .vertical)
     self.addSubview(view)
@@ -55,12 +55,25 @@ public class BoxView: UIView {
     switch shape {
     case .rect:
       self.layer.cornerRadius = 0
+      self.layer.borderWidth = 1.0
+      self.layer.borderColor = UIColor.black.cgColor
+
     case .pill:
       self.layer.cornerRadius = self.layer.bounds.height / 2
+      self.layer.borderWidth = 1.0
+      self.layer.borderColor = UIColor.black.cgColor
+
     case .diamond:
-      let shapeLayer = CAShapeLayer()
-      shapeLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
-      self.layer.mask = shapeLayer
+      let maskLayer = CAShapeLayer()
+      maskLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
+      self.layer.mask = maskLayer
+
+      let strokeLayer = CAShapeLayer()
+      strokeLayer.lineWidth = 1.0
+      strokeLayer.path = UIBezierPath.diamond(self.bounds, inset: strokeLayer.lineWidth).cgPath
+      strokeLayer.strokeColor = UIColor.black.cgColor
+      strokeLayer.fillColor = UIColor.clear.cgColor
+      self.layer.addSublayer(strokeLayer)
     }
   }
 
