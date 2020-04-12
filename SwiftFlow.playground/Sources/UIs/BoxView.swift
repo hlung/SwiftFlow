@@ -8,9 +8,6 @@ public class BoxView: UIView {
   public var id: String?
 
   // Customizables
-  private let rectLayoutMargins = UIEdgeInsets(top: -5, left: -10,
-                                               bottom: -5, right: -10)
-  private let rectCornerRadius: CGFloat = 5
 
   public init(_ view: UIView, shape: BoxShape) {
     self.view = view
@@ -20,8 +17,6 @@ public class BoxView: UIView {
     self.backgroundColor = .gray
     self.setContentHuggingPriority(.required, for: .horizontal)
     self.setContentHuggingPriority(.required, for: .vertical)
-//    self.view.setContentHuggingPriority(.required, for: .horizontal)
-//    self.view.setContentHuggingPriority(.required, for: .vertical)
     self.addSubview(view)
 
     var constraints: [NSLayoutConstraint] = []
@@ -31,8 +26,8 @@ public class BoxView: UIView {
     ]
 
     switch shape {
-    case .rect:
-      view.layoutMargins = rectLayoutMargins
+    case .rect, .pill:
+      view.layoutMargins = UIEdgeInsets(top: -5, left: -10, bottom: -5, right: -10)
       constraints += [
         topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
         leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
@@ -59,7 +54,9 @@ public class BoxView: UIView {
     super.layoutSubviews()
     switch shape {
     case .rect:
-      self.layer.cornerRadius = rectCornerRadius
+      self.layer.cornerRadius = 0
+    case .pill:
+      self.layer.cornerRadius = self.layer.bounds.height / 2
     case .diamond:
       let shapeLayer = CAShapeLayer()
       shapeLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath

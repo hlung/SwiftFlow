@@ -2,6 +2,7 @@ import Foundation
 
 public enum BoxShape {
   case rect
+  case pill
   case diamond
 }
 

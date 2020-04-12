@@ -1,13 +1,12 @@
 /* TODO
- - add arrow label
- - pill shape box
+ //- add arrow label
+ //- pill shape box
  - box borders
  - box background color
  - change leading/trailing to left/right ?
  Extras
- - arrow length multiplier
- - all boxes margin constraints (avoid different flow colliding) ?
- - check duplicate id
+ - add errors: check duplicate id
+ - avoid collissions: between boxes, box and arrow labels
  */
 
 import UIKit
@@ -103,13 +102,13 @@ constraints += [
  >  = arrow right
  -----------------
 
- [] Start
+ () Start
  v
  <> Success? :: success
  v Yes
  [] Throw party!
  v
- [] End :: end
+ () End :: end
 
  :: success
  > No
@@ -123,20 +122,20 @@ constraints += [
 let graph = Graph()
 
 graph.addFlow([
-  Box(shape: .rect, title: "Start"),
+  Box(shape: .pill, title: "Start"),
   Arrow(direction: .down),
   Box(shape: .diamond, title: "Success?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
   Box(shape: .rect, title: "Throw party!"),
   Arrow(direction: .down),
-  Box(shape: .rect, title: "End", id: "end"),
+  Box(shape: .pill, title: "End", id: "end"),
 ])
 
 graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
   Box(shape: .rect, title: "Cry"),
-  Arrow(direction: .down, extraSpace: 20),
+  Arrow(direction: .down, extraSpace: 10),
   Box(shape: .rect, title: "Go home"),
   Arrow(direction: .down),
   BoxShortcut(id: "end"),

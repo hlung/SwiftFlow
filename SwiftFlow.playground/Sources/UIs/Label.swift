@@ -17,6 +17,6 @@ public class Label: UILabel {
   }
 
   public override var description: String {
-    return "[Label frame = \(frame) \"\(text)\"]"
+    return "[Label frame = \(frame) \"\(text ?? "-")\"]"
   }
 }
