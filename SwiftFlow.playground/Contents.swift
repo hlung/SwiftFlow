@@ -136,8 +136,8 @@ extension GraphView {
     NSLayoutConstraint.activate([
       topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
       leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
-      trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
       bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
+      trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
     ])
   }
 }

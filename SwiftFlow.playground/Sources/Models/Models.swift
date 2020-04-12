@@ -7,7 +7,7 @@ public enum BoxType {
 
 public enum Direction {
   case up
-  case right
-  case down
   case left
+  case down
+  case right
 }

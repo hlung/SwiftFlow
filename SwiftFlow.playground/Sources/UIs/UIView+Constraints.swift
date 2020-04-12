@@ -8,9 +8,9 @@ public extension UIView {
         layoutMarginsGuide.topAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
         centerXAnchor.constraint(equalTo: view.centerXAnchor),
       ]
-    case .right:
+    case .left:
       return [
-        layoutMarginsGuide.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
+        layoutMarginsGuide.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
         centerYAnchor.constraint(equalTo: view.centerYAnchor),
       ]
     case .down:
@@ -18,9 +18,9 @@ public extension UIView {
         layoutMarginsGuide.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
         centerXAnchor.constraint(equalTo: view.centerXAnchor),
       ]
-    case .left:
+    case .right:
       return [
-        layoutMarginsGuide.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
+        layoutMarginsGuide.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
         centerYAnchor.constraint(equalTo: view.centerYAnchor),
       ]
     }
@@ -85,7 +85,7 @@ public extension UIEdgeInsets {
 }
 
 public extension NSLayoutConstraint {
-  public func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+  func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
     self.priority = priority
     return self
   }

@@ -36,8 +36,8 @@ public class BoxView: UIView {
       constraints += [
         topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
         leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
-        trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
         bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
+        trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
       ]
     case .diamond:
       view.layoutMargins = UIEdgeInsets(top: -view.intrinsicContentSize.width/2,
@@ -47,8 +47,8 @@ public class BoxView: UIView {
       constraints += [
         topAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.topAnchor),
         leadingAnchor.constraint(lessThanOrEqualTo: view.layoutMarginsGuide.leadingAnchor),
-        trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
         bottomAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.bottomAnchor),
+        trailingAnchor.constraint(greaterThanOrEqualTo: view.layoutMarginsGuide.trailingAnchor),
       ]
     }
 
