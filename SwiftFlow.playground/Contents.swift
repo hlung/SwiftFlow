@@ -3,7 +3,7 @@
  - add Box borders
  - change leading/trailing to left/right ?
  Extras
- - all boxes margin constraints ?
+ - all boxes margin constraints (avoid different flow colliding) ?
  - check duplicate id
  */
 
@@ -115,8 +115,8 @@ graph.addFlow([
   Box(type: .rect, title: "Cry"),
   Arrow(direction: .down, title: "No"),
   Box(type: .rect, title: "Go home"),
-//  Arrow(direction: .down, title: nil),
-//  BoxShortcut(id: "end"),
+  Arrow(direction: .down, title: nil),
+  BoxShortcut(id: "end"),
 ])
 
 // --- drawing ---
@@ -130,7 +130,7 @@ extension GraphView {
   }
 
   public func addSubviewIfNeeded(_ view: UIView) {
-    guard (self.subviews.first(where: { $0 == view }) == nil) else { return }
+    //guard (self.subviews.first(where: { $0 == view }) == nil) else { return }
     super.addSubview(view)
     view.layoutMargins = UIEdgeInsets(expandingBy: subviewPadding)
     NSLayoutConstraint.activate([
@@ -154,11 +154,18 @@ for flow in graph.flows {
     if let arrow = e as? Arrow, index+1 < flow.count {
 
       let boxViewBefore: BoxView
+      var boxViewBeforeIsNew = false
       let elementBefore = flow[index-1]
       if let boxBefore = elementBefore as? Box {
-        boxViewBefore = graphView.boxViewWithID(boxBefore.id) ??
-          BoxView(Label(boxBefore.title), type: boxBefore.type)
-        boxViewBefore.id = boxBefore.id
+        if let existing = graphView.boxViewWithID(boxBefore.id) {
+          boxViewBefore = existing
+        }
+        else {
+          boxViewBefore = BoxView(Label(boxBefore.title), type: boxBefore.type)
+          boxViewBefore.id = boxBefore.id
+          graphView.addSubviewIfNeeded(boxViewBefore)
+          boxViewBeforeIsNew = true
+        }
       }
       else if let boxShortcutBefore = elementBefore as? BoxShortcut,
         let view = graphView.boxViewWithID(boxShortcutBefore.id) {
@@ -169,16 +176,18 @@ for flow in graph.flows {
       }
 
       let boxViewAfter: BoxView
+      var boxViewAfterIsNew = false
       let elementAfter = flow[index+1]
       if let boxAfter = elementAfter as? Box {
-        boxViewAfter = graphView.boxViewWithID(boxAfter.id) ??
-          BoxView(Label(boxAfter.title), type: boxAfter.type)
-        boxViewAfter.id = boxAfter.id
-
-        graphView.addSubviewIfNeeded(boxViewBefore)
-        graphView.addSubviewIfNeeded(boxViewAfter)
-        constraints += boxViewBefore.constraints(direction: arrow.direction,
-                                                 to: boxViewAfter)
+        if let existing = graphView.boxViewWithID(boxAfter.id) {
+          boxViewAfter = existing
+        }
+        else {
+          boxViewAfter = BoxView(Label(boxAfter.title), type: boxAfter.type)
+          boxViewAfter.id = boxAfter.id
+          graphView.addSubviewIfNeeded(boxViewAfter)
+          boxViewAfterIsNew = true
+        }
       }
       else if let boxShortcutAfter = elementAfter as? BoxShortcut,
         let view = graphView.boxViewWithID(boxShortcutAfter.id) {
@@ -188,7 +197,10 @@ for flow in graph.flows {
         fatalError("Cannot find box after arrow")
       }
 
-
+      if boxViewBeforeIsNew || boxViewAfterIsNew {
+        constraints += boxViewBefore.constraints(direction: arrow.direction,
+                                                 to: boxViewAfter)
+      }
 
 //      print("-- \(boxBefore)\n   \(boxAfter)")
     }
