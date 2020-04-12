@@ -8,8 +8,8 @@ public class BoxView: UIView {
   public var id: String?
 
   // Customizables
-  private let rectLayoutMargins = UIEdgeInsets(top: -10, left: -20,
-                                               bottom: -10, right: -20)
+  private let rectLayoutMargins = UIEdgeInsets(top: -5, left: -10,
+                                               bottom: -5, right: -10)
   private let rectCornerRadius: CGFloat = 5
 
   public init(_ view: UIView, type: BoxType) {

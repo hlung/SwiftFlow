@@ -1,8 +1,11 @@
 /* TODO
  - add arrow label
- - add Box borders
+ - pill shape box
+ - box borders
+ - box background color
  - change leading/trailing to left/right ?
  Extras
+ - arrow length multiplier
  - all boxes margin constraints (avoid different flow colliding) ?
  - check duplicate id
  */
@@ -86,27 +89,28 @@ constraints += [
 // --- data ---
 /*
  -----------------
- Legend:
- :: = id
- [], <> = box type
- v = arrow down
+ Markdown legend:
+ [], <>, () = box type
+ :: = box shortcut
+ v  = arrow down
+ >  = arrow right
  -----------------
 
  [] Start
  v
- [] API Client receives responses
+ <> Success? :: success
+ v Yes
+ [] Throw party!
  v
- <> Success?
- > NO [] Handle failure :: result_no
- v YES [] Handle success :: result_yes
- v
- [] Print Yay
- result_no
- v
- [] Print Cry
- vv
- [] End
+ [] End :: end
 
+ :: success
+ > No
+ [] Cry
+ v
+ [] Go home
+ v
+ :: end
  */
 
 let graph = Graph()
@@ -116,7 +120,7 @@ graph.addFlow([
   Arrow(direction: .down, title: nil),
   Box(type: .diamond, title: "Success?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
-  Box(type: .rect, title: "Celebrate!"),
+  Box(type: .rect, title: "Throw party!"),
   Arrow(direction: .down, title: nil),
   Box(type: .rect, title: "End", id: "end"),
 ])
