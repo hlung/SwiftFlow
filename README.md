@@ -13,7 +13,7 @@
   - has annotation
   - can specify preferred arrow direction (up, down, left, right, diagonal?)
 - box 
-  - types: [] rectangle, {} pill, <> diamond, () circle, // slanted, etc.
+  - types: [] rectangle, () pill, <> diamond, // slanted, etc.
   - allow multiline text
 - support bold/italic text
 - support live editing = Xcode playground + Autolayout. SwiftUI live preview is faster but layout is less flexible.
@@ -58,3 +58,37 @@ graph.addFlow([
 
 ### Notes
 - I know the SwiftFlow name conflicts with https://github.com/Swift-Kit/Swift-Flow , but I don't care :P.
+
+## Extra feature ideas
+
+These below are just just ideas. 💡
+
+### String format
+
+For those not familiar with Swift language, strings can be used to create the flowchart as well, similar to markdown format.
+
+```swiftflow
+ -----------------
+ Legend:
+ [], <>, () = box shape
+ :: = box shortcut
+ v  = arrow down
+ >  = arrow right
+ -----------------
+
+ () Start
+ v
+ <> Success? :: success
+ v Yes
+ [] Throw party!
+ v
+ () End :: end
+
+ :: success
+ > No
+ [] Cry
+ v
+ [] Go home
+ v
+ :: end
+```
