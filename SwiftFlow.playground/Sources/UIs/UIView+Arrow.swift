@@ -2,7 +2,7 @@ import UIKit
 
 //public extension UIView {
 //  func addArrowLayer(with plan: ArrowDrawingPlan) {
-//    let parameters = ArrowParameters(tailWidth: 2, headWidth: 7, headLength: 7)
+//    let parameters = ArrowConfig(tailWidth: 2, headWidth: 7, headLength: 7)
 //    let startView: UIView = plan.startView
 //    let endView: UIView = plan.endView
 //

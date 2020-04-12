@@ -1,6 +1,7 @@
 import UIKit
 
 public class GraphView: UIView {
+
   public var subviewPadding: CGFloat = 20
 
   public init() {

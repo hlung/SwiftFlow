@@ -14,8 +14,19 @@ public enum Direction {
 }
 
 public struct BoxConfig {
-  public var backgroundColor: UIColor
-  public var borderColor: UIColor
+  public var backgroundColor: UIColor = .clear
+  public var borderColor: UIColor = .black
 
-  public static let `default` = BoxConfig(backgroundColor: .clear, borderColor: .black)
+  public init() {
+  }
+}
+
+public struct ArrowConfig {
+  public var tailWidth: CGFloat = 2
+  public var headWidth: CGFloat = 7
+  public var headLength: CGFloat = 7
+  public var extraSpace: CGFloat = 0
+
+  public init() {
+  }
 }

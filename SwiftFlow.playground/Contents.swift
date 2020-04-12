@@ -12,7 +12,8 @@ import PlaygroundSupport
 
 public class Graph {
   var flows: [[GraphElement]] = []
-  var boxConfig = BoxConfig.default
+  var boxConfig = BoxConfig()
+  var arrowConfig = ArrowConfig()
 
   func addFlow(_ elements: [GraphElement]) {
     flows.append(elements)
@@ -43,7 +44,7 @@ public struct Box: GraphElement, CustomStringConvertible {
 }
 
 public struct BoxShortcut: GraphElement, CustomStringConvertible {
-  let id: String
+  public let id: String
 
   public var description: String {
     return "[BoxShortcut id: \(id)]"
@@ -51,18 +52,20 @@ public struct BoxShortcut: GraphElement, CustomStringConvertible {
 }
 
 public struct Arrow: GraphElement, CustomStringConvertible {
-  let direction: Direction
-  let title: String?
-  let extraSpace: CGFloat
+  public let direction: Direction
+  public let title: String?
+  public let config: ArrowConfig?
 
   public var description: String {
     return "[Arrow \(direction) title \(title ?? "-")]"
   }
 
-  public init(direction: Direction, title: String? = nil, extraSpace: CGFloat = 0) {
+  public init(direction: Direction,
+              title: String? = nil,
+              config: ArrowConfig? = nil) {
     self.direction = direction
     self.title = title
-    self.extraSpace = extraSpace
+    self.config = config
   }
 }
 
@@ -98,11 +101,11 @@ constraints += [
 
 var graph = Graph()
 
-var blueBoxConfig = BoxConfig.default
+var blueBoxConfig = BoxConfig()
 blueBoxConfig.backgroundColor = UIColor(hex: "9EE5FF")!
 graph.boxConfig = blueBoxConfig
 
-var redBoxConfig = BoxConfig.default
+var redBoxConfig = BoxConfig()
 redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
 
 graph.addFlow([
@@ -119,7 +122,7 @@ graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
   Box(shape: .rect, title: "Cry", config: redBoxConfig),
-  Arrow(direction: .down, extraSpace: 10),
+  Arrow(direction: .down, config: ArrowConfig()),
   Box(shape: .rect, title: "Go home"),
   Arrow(direction: .down),
   BoxShortcut(id: "end"),
@@ -147,9 +150,8 @@ public extension GraphView {
   }
 }
 
-var prevBox: Box?
-var prevArrow: Arrow?
 var arrowDrawingPlans: [ArrowDrawingPlan] = []
+
 for flow in graph.flows {
   guard flow.count > 0 else { continue }
 
@@ -210,9 +212,10 @@ for flow in graph.flows {
 
       // Add constraints and arrows
       if boxViewBeforeIsNew || boxViewAfterIsNew {
+        let extraSpace = arrow.config?.extraSpace ?? graph.arrowConfig.extraSpace
         constraints += boxViewBefore.constraints(direction: arrow.direction,
                                                  to: boxViewAfter,
-                                                 extraSpace: arrow.extraSpace)
+                                                 extraSpace: extraSpace)
       }
 
       let plan = ArrowDrawingPlan(startView: boxViewBefore,
@@ -243,7 +246,7 @@ graphView.layoutIfNeeded()
 
 public extension UIView {
   func addArrow(_ plan: ArrowDrawingPlan) {
-    let parameters = ArrowParameters(tailWidth: 2, headWidth: 7, headLength: 7)
+    let config = ArrowConfig()
     let startView: UIView = plan.startView
     let endView: UIView = plan.endView
 
@@ -282,19 +285,19 @@ public extension UIView {
     case .up:
       layer = CAShapeLayer.arrow(from: startView.frame.centerTop,
                                  to: endView.frame.centerBottom,
-                                 parameters: parameters)
+                                 config: config)
     case .right:
       layer = CAShapeLayer.arrow(from: startView.frame.centerRight,
                                  to: endView.frame.centerLeft,
-                                 parameters: parameters)
+                                 config: config)
     case .down:
       layer = CAShapeLayer.arrow(from: startView.frame.centerBottom,
                                  to: endView.frame.centerTop,
-                                 parameters: parameters)
+                                 config: config)
     case .left:
       layer = CAShapeLayer.arrow(from: startView.frame.centerLeft,
                                  to: endView.frame.centerRight,
-                                 parameters: parameters)
+                                 config: config)
     }
     self.layer.addSublayer(layer)
   }
@@ -303,10 +306,3 @@ public extension UIView {
 for plan in arrowDrawingPlans {
   graphView.addArrow(plan)
 }
-
-//graphView.addArrow(direction: .right, on: [
-//  label_success,
-//  label_cry,
-//])
-
-// ---------

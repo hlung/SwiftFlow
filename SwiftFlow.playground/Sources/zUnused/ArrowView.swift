@@ -1,7 +1,7 @@
 //import UIKit
 //
 //public class ArrowView: UIView {
-//  let parameters: ArrowParameters = ArrowParameters(tailWidth: 2, headWidth: 10, headLength: 10)
+//  let parameters: ArrowConfig = ArrowConfig(tailWidth: 2, headWidth: 10, headLength: 10)
 //
 //  public init() {
 //    super.init(frame: .zero)
