@@ -78,9 +78,9 @@ For those not familiar with Swift language, strings can be used to create the fl
 
  () Start
  v
- <> Success? :: success
+ <> Work\nSuccess? :: success
  v Yes
- [] Throw party!
+ [] Go party!
  v
  () End :: end
 
