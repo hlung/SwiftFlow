@@ -8,7 +8,7 @@ public class Label: UILabel {
     self.backgroundColor = .lightGray
     self.numberOfLines = 0
     self.textAlignment = .center
-    self.font = .systemFont(ofSize: 18)
+    self.font = .systemFont(ofSize: 16)
     self.translatesAutoresizingMaskIntoConstraints = false
   }
 

@@ -52,9 +52,16 @@ public struct BoxShortcut: GraphElement, CustomStringConvertible {
 public struct Arrow: GraphElement, CustomStringConvertible {
   let direction: Direction
   let title: String?
+  let extraSpace: CGFloat
 
   public var description: String {
     return "[Arrow \(direction) title \(title ?? "-")]"
+  }
+
+  public init(direction: Direction, title: String? = nil, extraSpace: CGFloat = 0) {
+    self.direction = direction
+    self.title = title
+    self.extraSpace = extraSpace
   }
 }
 
@@ -117,11 +124,11 @@ let graph = Graph()
 
 graph.addFlow([
   Box(shape: .rect, title: "Start"),
-  Arrow(direction: .down, title: nil),
+  Arrow(direction: .down),
   Box(shape: .diamond, title: "Success?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
   Box(shape: .rect, title: "Throw party!"),
-  Arrow(direction: .down, title: nil),
+  Arrow(direction: .down),
   Box(shape: .rect, title: "End", id: "end"),
 ])
 
@@ -129,9 +136,9 @@ graph.addFlow([
   BoxShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
   Box(shape: .rect, title: "Cry"),
-  Arrow(direction: .down, title: "No"),
+  Arrow(direction: .down, extraSpace: 20),
   Box(shape: .rect, title: "Go home"),
-  Arrow(direction: .down, title: nil),
+  Arrow(direction: .down),
   BoxShortcut(id: "end"),
 ])
 
@@ -215,7 +222,8 @@ for flow in graph.flows {
 
       if boxViewBeforeIsNew || boxViewAfterIsNew {
         constraints += boxViewBefore.constraints(direction: arrow.direction,
-                                                 to: boxViewAfter)
+                                                 to: boxViewAfter,
+                                                 extraSpace: arrow.extraSpace)
       }
 
       let plan = ArrowDrawingPlan(startView: boxViewBefore,
@@ -244,10 +252,40 @@ print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 graphView.layoutIfNeeded()
 
 public extension UIView {
-  func addArrowLayer(with plan: ArrowDrawingPlan) {
+  func addArrow(_ plan: ArrowDrawingPlan) {
     let parameters = ArrowParameters(tailWidth: 2, headWidth: 7, headLength: 7)
     let startView: UIView = plan.startView
     let endView: UIView = plan.endView
+
+    if let title = plan.arrow.title {
+      let label = Label(title)
+      label.font = .systemFont(ofSize: 14)
+      addSubview(label)
+      let labelConstraints: [NSLayoutConstraint]
+      switch plan.arrow.direction {
+      case .up:
+        labelConstraints = [
+          label.leftAnchor.constraint(equalTo: startView.centerXAnchor, constant: 3),
+          label.bottomAnchor.constraint(equalTo: startView.topAnchor, constant: -3),
+        ]
+      case .right:
+        labelConstraints = [
+          label.leftAnchor.constraint(equalTo: startView.rightAnchor, constant: 3),
+          label.bottomAnchor.constraint(equalTo: startView.centerYAnchor, constant: -3),
+        ]
+      case .down:
+        labelConstraints = [
+          label.leftAnchor.constraint(equalTo: startView.centerXAnchor, constant: 3),
+          label.topAnchor.constraint(equalTo: startView.bottomAnchor, constant: 3),
+        ]
+      case .left:
+        labelConstraints = [
+          label.rightAnchor.constraint(equalTo: startView.leftAnchor, constant: -3),
+          label.bottomAnchor.constraint(equalTo: startView.centerYAnchor, constant: -3),
+        ]
+      }
+      NSLayoutConstraint.activate(labelConstraints)
+    }
 
     let layer: CAShapeLayer
     switch plan.arrow.direction {
@@ -273,7 +311,7 @@ public extension UIView {
 }
 
 for plan in arrowDrawingPlans {
-  graphView.addArrowLayer(with: plan)
+  graphView.addArrow(plan)
 }
 
 //graphView.addArrow(direction: .right, on: [

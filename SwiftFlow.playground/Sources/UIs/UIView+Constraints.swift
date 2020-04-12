@@ -1,26 +1,26 @@
 import UIKit
 
 public extension UIView {
-  func constraints(direction: Direction, to view: UIView) -> [NSLayoutConstraint] {
+  func constraints(direction: Direction, to view: UIView, extraSpace: CGFloat = 0) -> [NSLayoutConstraint] {
     switch direction {
     case .up:
       return [
-        layoutMarginsGuide.topAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor),
+        layoutMarginsGuide.topAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: extraSpace),
         centerXAnchor.constraint(equalTo: view.centerXAnchor),
       ]
     case .left:
       return [
-        layoutMarginsGuide.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor),
+        layoutMarginsGuide.leftAnchor.constraint(equalTo: view.layoutMarginsGuide.rightAnchor, constant: extraSpace),
         centerYAnchor.constraint(equalTo: view.centerYAnchor),
       ]
     case .down:
       return [
-        layoutMarginsGuide.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor),
+        layoutMarginsGuide.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: -extraSpace),
         centerXAnchor.constraint(equalTo: view.centerXAnchor),
       ]
     case .right:
       return [
-        layoutMarginsGuide.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor),
+        layoutMarginsGuide.rightAnchor.constraint(equalTo: view.layoutMarginsGuide.leftAnchor, constant: -extraSpace),
         centerYAnchor.constraint(equalTo: view.centerYAnchor),
       ]
     }
