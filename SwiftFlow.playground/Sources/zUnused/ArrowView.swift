@@ -36,20 +36,20 @@
 //    constraints += [
 //      arrowView.widthAnchor.constraint(greaterThanOrEqualToConstant: aWidth),
 //      arrowView.heightAnchor.constraint(greaterThanOrEqualToConstant: aWidth),
-////      arrowView.topAnchor.constraint(equalTo: firstBox.bottomAnchor, constant: -aOffset),
-////      arrowView.bottomAnchor.constraint(equalTo: secondBox.topAnchor, constant: aOffset),
+////      arrowView.topAnchor.constraint(equalTo: firstNode.bottomAnchor, constant: -aOffset),
+////      arrowView.bottomAnchor.constraint(equalTo: secondNode.topAnchor, constant: aOffset),
 //    ]
 //
-//    if firstBox.center.x < secondBox.center.x {
+//    if firstNode.center.x < secondNode.center.x {
 //      constraints += [
-//        arrowView.leadingAnchor.constraint(equalTo: firstBox.centerXAnchor, constant: -aOffset),
-//        arrowView.trailingAnchor.constraint(equalTo: secondBox.centerXAnchor, constant: aOffset),
+//        arrowView.leadingAnchor.constraint(equalTo: firstNode.centerXAnchor, constant: -aOffset),
+//        arrowView.trailingAnchor.constraint(equalTo: secondNode.centerXAnchor, constant: aOffset),
 //      ]
 //    }
 //    else {
 //      constraints += [
-//        arrowView.leadingAnchor.constraint(equalTo: secondBox.centerXAnchor, constant: -aOffset),
-//        arrowView.trailingAnchor.constraint(equalTo: firstBox.centerXAnchor, constant: aOffset),
+//        arrowView.leadingAnchor.constraint(equalTo: secondNode.centerXAnchor, constant: -aOffset),
+//        arrowView.trailingAnchor.constraint(equalTo: firstNode.centerXAnchor, constant: aOffset),
 //      ]
 //    }
 //    */

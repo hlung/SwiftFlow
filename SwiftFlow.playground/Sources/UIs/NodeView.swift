@@ -1,16 +1,16 @@
 import UIKit
 
-public class BoxView: UIView {
+public class NodeView: UIView {
   public let view: UIView
-  public let shape: BoxShape
+  public let shape: NodeShape
 
-  // box
-  public var id: String? // change to Box
-  public let config: BoxConfig
+  // node
+  public var id: String? // change to Node
+  public let config: NodeConfig
 
   // Customizables
 
-  public init(_ view: UIView, shape: BoxShape, config: BoxConfig) {
+  public init(_ view: UIView, shape: NodeShape, config: NodeConfig) {
     self.view = view
     self.shape = shape
     self.config = config
@@ -84,7 +84,7 @@ public class BoxView: UIView {
   }
 
   public override var description: String {
-    return "[BoxView frame = \(frame), subviews = \(subviews)]"
+    return "[NodeView frame = \(frame), subviews = \(subviews)]"
   }
 
   public override var intrinsicContentSize: CGSize {

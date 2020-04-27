@@ -46,15 +46,15 @@
 //() End
 //"""
 
-//public struct Box: CustomStringConvertible {
-//  // BoxShape (first two characters)
+//public struct Node: CustomStringConvertible {
+//  // NodeShape (first two characters)
 //  // |  Title (all strings until end of line or :: )
 //  // |  |        ID (optional, all strings until end)
 //  // |  |        |
 //  // v  v        v
 //  // () Title :: id
 //
-//  public enum BoxShape {
+//  public enum NodeShape {
 //    case rect
 //    case diamond
 //
@@ -72,13 +72,13 @@
 //    case invalidType
 //  }
 //
-//  let type: BoxShape
+//  let type: NodeShape
 //  let title: String
 //  let id: String?
 //
 //  init(string: String) throws {
 //    var s = string
-//    guard let rawType = s.pull(2), let type = BoxShape(rawType: rawType) else { throw InitError.invalidType }
+//    guard let rawType = s.pull(2), let type = NodeShape(rawType: rawType) else { throw InitError.invalidType }
 //    self.type = type
 //
 //    self.title = "Hello"
@@ -86,8 +86,8 @@
 //  }
 //
 //  public var description: String {
-//    return "[Box \(type) title: \(title) id: \(id ?? "-")]"
+//    return "[Node \(type) title: \(title) id: \(id ?? "-")]"
 //  }
 //}
 //
-//let b = try Box(string: "() Start")
+//let b = try Node(string: "() Start")

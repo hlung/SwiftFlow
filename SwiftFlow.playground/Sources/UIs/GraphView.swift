@@ -17,22 +17,22 @@ public class GraphView: UIView {
 }
 
 public extension GraphView {
-  func existingBoxView(with id: String) -> BoxView? {
+  func existingNodeView(with id: String) -> NodeView? {
     return self.subviews.first(where: { view in
-      if let view = view as? BoxView, view.id == id { return true }
+      if let view = view as? NodeView, view.id == id { return true }
       else { return false }
-    }) as? BoxView
+    }) as? NodeView
   }
 
-  func addBoxView(_ boxView: BoxView) {
-    super.addSubview(boxView)
+  func addNodeView(_ nodeView: NodeView) {
+    super.addSubview(nodeView)
 
-    // Graph - Box constraints
+    // Graph - Node constraints
     NSLayoutConstraint.activate([
-      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: boxView.topAnchor),
-      layoutMarginsGuide.leftAnchor.constraint(lessThanOrEqualTo: boxView.leftAnchor),
-      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: boxView.bottomAnchor),
-      layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: boxView.rightAnchor),
+      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: nodeView.topAnchor),
+      layoutMarginsGuide.leftAnchor.constraint(lessThanOrEqualTo: nodeView.leftAnchor),
+      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: nodeView.bottomAnchor),
+      layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: nodeView.rightAnchor),
     ])
   }
 }

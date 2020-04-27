@@ -1,6 +1,6 @@
 import UIKit
 
-public enum BoxShape {
+public enum NodeShape {
   case rect
   case pill
   case diamond
@@ -43,7 +43,7 @@ public struct EdgeOffsets {
   }
 }
 
-public struct BoxConfig {
+public struct NodeConfig {
   public var backgroundColor: UIColor = .clear
   public var borderColor: UIColor = .black
   public var edgeOffsets = EdgeOffsets(allSides: 20)

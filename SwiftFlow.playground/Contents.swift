@@ -1,7 +1,7 @@
 /* TODO
- - Rename Box to Node
+ - Rename Node to Node
  Extras
- - avoid collissions: between boxes, box and arrow labels
+ - avoid collissions: between nodes, node and arrow labels
  */
 
 import UIKit
@@ -9,35 +9,35 @@ import PlaygroundSupport
 
 // --- data ---
 
+var blueNodeConfig = NodeConfig()
+blueNodeConfig.backgroundColor = UIColor(hex: "9EE5FF")!
+
+var redNodeConfig = NodeConfig()
+redNodeConfig.backgroundColor = UIColor(hex: "FFCCD0")!
+
 var graph = Graph()
-
-var blueBoxConfig = BoxConfig()
-blueBoxConfig.backgroundColor = UIColor(hex: "9EE5FF")!
-graph.boxConfig = blueBoxConfig
-
-var redBoxConfig = BoxConfig()
-redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
+graph.nodeConfig = blueNodeConfig
 
 //graph.addFlow([
-//  Box(shape: .pill, title: "Start"),
+//  Node(shape: .pill, title: "Start"),
 //])
 
 graph.addFlow([
-  Box(shape: .pill, title: "Start"),
+  Node(shape: .pill, title: "Start"),
   Arrow(direction: .down),
-  Box(shape: .diamond, title: "Work\nsuccess?", id: "success"),
+  Node(shape: .diamond, title: "Work\nsuccess?", id: "success"),
   Arrow(direction: .down, title: "Yes"),
-  Box(shape: .rect, title: "Go Party!"),
+  Node(shape: .rect, title: "Go Party!"),
   Arrow(direction: .down),
-  Box(shape: .pill, title: "End", id: "end"),
+  Node(shape: .pill, title: "End", id: "end"),
 ])
 
 graph.addFlow([
   NodeShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
-  Box(shape: .rect, title: "Cry", config: redBoxConfig),
+  Node(shape: .rect, title: "Cry", config: redNodeConfig),
   Arrow(direction: .down),
-  Box(shape: .rect, title: "Go home"),
+  Node(shape: .rect, title: "Go home"),
   Arrow(direction: .down),
   NodeShortcut(id: "end"),
 ])
@@ -67,17 +67,17 @@ extension GraphView {
     for flow in graph.flows {
       guard !flow.isEmpty else { throw GraphViewError.graphIsEmpty }
 
-      var savedNodeView: BoxView
+      var savedNodeView: NodeView
       var savedArrow: Arrow? = nil
 
       // Draw first node
-      if let firstNode = flow.first as? Box {
-        let view = BoxView(box: firstNode, config: firstNode.config ?? graph.boxConfig)
-        self.addBoxView(view)
+      if let firstNode = flow.first as? Node {
+        let view = NodeView(node: firstNode, config: firstNode.config ?? graph.nodeConfig)
+        self.addNodeView(view)
         savedNodeView = view
       }
       else if let firstShortcut = flow.first as? NodeShortcut {
-        guard let view = self.existingBoxView(with: firstShortcut.id) else {
+        guard let view = self.existingNodeView(with: firstShortcut.id) else {
           throw GraphViewError.shortcutNodeNotFound
         }
         savedNodeView = view
@@ -96,11 +96,11 @@ extension GraphView {
           continue
         }
 
-        if let node = e as? Box {
-          guard self.existingBoxView(with: node.id) == nil else { throw GraphViewError.duplicatedNodeId }
+        if let node = e as? Node {
+          guard self.existingNodeView(with: node.id) == nil else { throw GraphViewError.duplicatedNodeId }
           guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
-          let nodeView = BoxView(box: node, config: node.config ?? graph.boxConfig)
-          self.addBoxView(nodeView)
+          let nodeView = NodeView(node: node, config: node.config ?? graph.nodeConfig)
+          self.addNodeView(nodeView)
 
           let offset = EdgeOffsets.offset(from: savedNodeView.config.edgeOffsets,
                                           to: nodeView.config.edgeOffsets,
@@ -119,7 +119,7 @@ extension GraphView {
         }
         else if let shortcut = e as? NodeShortcut {
           guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
-          guard let nodeView = self.existingBoxView(with: shortcut.id) else {
+          guard let nodeView = self.existingNodeView(with: shortcut.id) else {
             throw GraphViewError.shortcutNodeNotFound
           }
 
@@ -148,7 +148,7 @@ extension GraphView {
 
 }
 
-// Move boxes to correct places, so we can draw arrows using absolute coordinates.
+// Move nodes to correct places, so we can draw arrows using absolute coordinates.
 PlaygroundPage.current.liveView = containerView
 //PlaygroundPage.current.needsIndefiniteExecution = true
 
@@ -175,10 +175,10 @@ public enum GraphViewError: Error {
   case danglingArrow
 }
 
-public extension BoxView {
-  convenience init(box: Box, config: BoxConfig) {
-    self.init(Label(box.title), shape: box.shape, config: config)
-    self.id = box.id
+public extension NodeView {
+  convenience init(node: Node, config: NodeConfig) {
+    self.init(Label(node.title), shape: node.shape, config: config)
+    self.id = node.id
   }
 }
 
@@ -247,7 +247,7 @@ public extension GraphView {
 
 public class Graph {
   var flows: [[GraphElement]] = []
-  var boxConfig = BoxConfig()
+  var nodeConfig = NodeConfig()
   var arrowConfig = ArrowConfig()
 
   func addFlow(_ elements: [GraphElement]) {
@@ -257,20 +257,20 @@ public class Graph {
 
 public protocol GraphElement {}
 
-public struct Box: GraphElement, CustomStringConvertible {
-  public let shape: BoxShape
+public struct Node: GraphElement, CustomStringConvertible {
+  public let shape: NodeShape
   public let title: String
   public let id: String
-  public let config: BoxConfig?
+  public let config: NodeConfig?
 
   public var description: String {
-    return "[Box \(shape) title: \(title) id: \(id)]"
+    return "[Node \(shape) title: \(title) id: \(id)]"
   }
 
-  public init(shape: BoxShape,
+  public init(shape: NodeShape,
               title: String,
               id: String = UUID().uuidString,
-              config: BoxConfig? = nil) {
+              config: NodeConfig? = nil) {
     self.shape = shape
     self.title = title
     self.id = id
