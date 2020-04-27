@@ -1,6 +1,6 @@
 /* TODO
+ - Rename Box to Node
  Extras
- - add errors: check duplicate id
  - avoid collissions: between boxes, box and arrow labels
  */
 
@@ -33,13 +33,13 @@ graph.addFlow([
 ])
 
 graph.addFlow([
-  BoxShortcut(id: "success"),
+  NodeShortcut(id: "success"),
   Arrow(direction: .right, title: "No"),
   Box(shape: .rect, title: "Cry", config: redBoxConfig),
   Arrow(direction: .down),
   Box(shape: .rect, title: "Go home"),
   Arrow(direction: .down),
-  BoxShortcut(id: "end"),
+  NodeShortcut(id: "end"),
 ])
 
 // --- UI ---
@@ -76,7 +76,7 @@ extension GraphView {
         self.addBoxView(view)
         savedNodeView = view
       }
-      else if let firstShortcut = flow.first as? BoxShortcut {
+      else if let firstShortcut = flow.first as? NodeShortcut {
         guard let view = self.existingBoxView(with: firstShortcut.id) else {
           throw GraphViewError.shortcutNodeNotFound
         }
@@ -117,7 +117,7 @@ extension GraphView {
           savedNodeView = nodeView
           savedArrow = nil
         }
-        else if let shortcut = e as? BoxShortcut {
+        else if let shortcut = e as? NodeShortcut {
           guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
           guard let nodeView = self.existingBoxView(with: shortcut.id) else {
             throw GraphViewError.shortcutNodeNotFound
@@ -278,11 +278,11 @@ public struct Box: GraphElement, CustomStringConvertible {
   }
 }
 
-public struct BoxShortcut: GraphElement, CustomStringConvertible {
+public struct NodeShortcut: GraphElement, CustomStringConvertible {
   public let id: String
 
   public var description: String {
-    return "[BoxShortcut id: \(id)]"
+    return "[NodeShortcut id: \(id)]"
   }
 }
 
