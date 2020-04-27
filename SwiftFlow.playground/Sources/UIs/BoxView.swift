@@ -5,7 +5,7 @@ public class BoxView: UIView {
   public let shape: BoxShape
 
   // box
-  public var id: String?
+  public var id: String? // change to Box
   public let config: BoxConfig
 
   // Customizables

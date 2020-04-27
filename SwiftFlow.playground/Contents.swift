@@ -1,5 +1,4 @@
 /* TODO
- - change leading/trailing to left/right ?
  Extras
  - add errors: check duplicate id
  - avoid collissions: between boxes, box and arrow labels
@@ -18,6 +17,10 @@ graph.boxConfig = blueBoxConfig
 
 var redBoxConfig = BoxConfig()
 redBoxConfig.backgroundColor = UIColor(hex: "FFCCD0")!
+
+//graph.addFlow([
+//  Box(shape: .pill, title: "Start"),
+//])
 
 graph.addFlow([
   Box(shape: .pill, title: "Start"),
@@ -42,7 +45,7 @@ graph.addFlow([
 // --- UI ---
 
 let containerView = UIView(frame: CGRect(x: 0.0, y: 0.0, width: 400, height: 500))
-containerView.backgroundColor = UIColor(hex: "9EFFB6")
+containerView.backgroundColor = UIColor(hex: "EAEAEA")
 
 var constraints: [NSLayoutConstraint] = []
 let graphView = GraphView()
@@ -52,103 +55,132 @@ constraints += [
   graphView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
   graphView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
 ]
+NSLayoutConstraint.activate(constraints)
 
-var arrowDrawingPlans: [ArrowDrawingPlan] = []
+extension GraphView {
 
-for flow in graph.flows {
-  guard flow.count > 0 else { continue }
+  func draw(_ graph: Graph) throws {
 
-  for index in 1..<flow.count {
-    let e = flow[index]
+    var arrowDrawingPlans: [ArrowDrawingPlan] = []
+    var constraints: [NSLayoutConstraint] = []
 
-    if let arrow = e as? Arrow, index+1 < flow.count {
-      // Box before
-      let boxViewBefore: BoxView
-      var boxViewBeforeIsNew = false
-      let elementBefore = flow[index-1]
-      if let boxBefore = elementBefore as? Box {
-        if let existing = graphView.boxViewWithID(boxBefore.id) {
-          boxViewBefore = existing
-        }
-        else {
-          let config = boxBefore.config ?? graph.boxConfig
-          boxViewBefore = BoxView(Label(boxBefore.title), shape: boxBefore.shape, config: config)
-          boxViewBefore.id = boxBefore.id
-          graphView.addBoxView(boxViewBefore)
-          boxViewBeforeIsNew = true
-        }
+    for flow in graph.flows {
+      guard !flow.isEmpty else { throw GraphViewError.graphIsEmpty }
+
+      var savedNodeView: BoxView
+      var savedArrow: Arrow? = nil
+
+      // Draw first node
+      if let firstNode = flow.first as? Box {
+        let view = BoxView(box: firstNode, config: firstNode.config ?? graph.boxConfig)
+        self.addBoxView(view)
+        savedNodeView = view
       }
-      else if let boxShortcutBefore = elementBefore as? BoxShortcut,
-        let view = graphView.boxViewWithID(boxShortcutBefore.id) {
-        boxViewBefore = view
+      else if let firstShortcut = flow.first as? BoxShortcut {
+        guard let view = self.existingBoxView(with: firstShortcut.id) else {
+          throw GraphViewError.shortcutNodeNotFound
+        }
+        savedNodeView = view
       }
       else {
-        fatalError("Cannot find box before arrow")
+        throw GraphViewError.noStartNode
       }
 
-      // Box after
-      let boxViewAfter: BoxView
-      var boxViewAfterIsNew = false
-      let elementAfter = flow[index+1]
-      if let boxAfter = elementAfter as? Box {
-        if let existing = graphView.boxViewWithID(boxAfter.id) {
-          boxViewAfter = existing
+      // Then draw next node when found an arrow and a node
+      for index in 1..<flow.count {
+        let e = flow[index]
+
+        if let arrow = e as? Arrow {
+          guard savedArrow == nil else { throw GraphViewError.danglingArrow }
+          savedArrow = arrow
+          continue
         }
-        else {
-          let config = boxAfter.config ?? graph.boxConfig
-          boxViewAfter = BoxView(Label(boxAfter.title), shape: boxAfter.shape, config: config)
-          boxViewAfter.id = boxAfter.id
-          graphView.addBoxView(boxViewAfter)
-          boxViewAfterIsNew = true
+
+        if let node = e as? Box {
+          guard self.existingBoxView(with: node.id) == nil else { throw GraphViewError.duplicatedNodeId }
+          guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
+          let nodeView = BoxView(box: node, config: node.config ?? graph.boxConfig)
+          self.addBoxView(nodeView)
+
+          let offset = EdgeOffsets.offset(from: savedNodeView.config.edgeOffsets,
+                                          to: nodeView.config.edgeOffsets,
+                                          direction: arrow.direction)
+          constraints += savedNodeView.constraints(direction: arrow.direction,
+                                                   to: nodeView,
+                                                   offset: offset)
+
+          let plan = ArrowDrawingPlan(startView: savedNodeView,
+                                      endView: nodeView,
+                                      arrow: arrow)
+          arrowDrawingPlans.append(plan)
+
+          savedNodeView = nodeView
+          savedArrow = nil
         }
-      }
-      else if let boxShortcutAfter = elementAfter as? BoxShortcut,
-        let view = graphView.boxViewWithID(boxShortcutAfter.id) {
-        boxViewAfter = view
-      }
-      else {
-        fatalError("Cannot find box after arrow")
-      }
+        else if let shortcut = e as? BoxShortcut {
+          guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
+          guard let nodeView = self.existingBoxView(with: shortcut.id) else {
+            throw GraphViewError.shortcutNodeNotFound
+          }
 
-      // Add constraints and arrows
-      if boxViewBeforeIsNew || boxViewAfterIsNew {
-        let offset = EdgeOffsets.offset(from: boxViewBefore.config.edgeOffsets,
-                                        to: boxViewAfter.config.edgeOffsets,
-                                        direction: arrow.direction)
-        constraints += boxViewBefore.constraints(direction: arrow.direction,
-                                                 to: boxViewAfter,
-                                                 offset: offset)
-      }
+          let plan = ArrowDrawingPlan(startView: savedNodeView,
+                                      endView: nodeView,
+                                      arrow: arrow)
+          arrowDrawingPlans.append(plan)
 
-      let plan = ArrowDrawingPlan(startView: boxViewBefore,
-                                  endView: boxViewAfter,
-                                  arrow: arrow)
-      arrowDrawingPlans.append(plan)
+          savedNodeView = nodeView
+          savedArrow = nil
+        }
+
+      }
+    }
+
+    NSLayoutConstraint.activate(constraints)
+    self.layoutIfNeeded()
+
+    // --- arrows ---
+    // We are not using autolayout for the arrows.
+    // So need to add arrows this AFTER all canstraints are activated and laid out.
+    for plan in arrowDrawingPlans {
+      self.addArrow(plan, defaultConfig: graph.arrowConfig)
     }
   }
+
 }
 
 // Move boxes to correct places, so we can draw arrows using absolute coordinates.
 PlaygroundPage.current.liveView = containerView
 //PlaygroundPage.current.needsIndefiniteExecution = true
 
-NSLayoutConstraint.activate(constraints)
 print("constraints: \(constraints.count)")
 print(constraints.map{ $0.description }.joined(separator: "\n"))
 print("")
 print("graphView.subviews: \(graphView.subviews.count)")
 print(graphView.subviews.map{ $0.description }.joined(separator: "\n"))
 
-// --- arrows ---
-// We are not using autolayout for the arrows.
-// So need to add arrows this AFTER all canstraints are activated and laid out.
-graphView.layoutIfNeeded()
-
-for plan in arrowDrawingPlans {
-  graphView.addArrow(plan, defaultConfig: graph.arrowConfig)
-}
+try graphView.draw(graph)
 
 // --------------
+
+public enum GraphViewError: Error {
+  // Graph
+  case graphIsEmpty
+  // Node
+  case duplicatedNodeId
+  case noStartNode
+  case danglingNode
+  // NodeShortcut
+  case shortcutNodeNotFound
+  // Arrow
+  case danglingArrow
+}
+
+public extension BoxView {
+  convenience init(box: Box, config: BoxConfig) {
+    self.init(Label(box.title), shape: box.shape, config: config)
+    self.id = box.id
+  }
+}
 
 public extension GraphView {
   func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {

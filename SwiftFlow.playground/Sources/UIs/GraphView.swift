@@ -17,7 +17,7 @@ public class GraphView: UIView {
 }
 
 public extension GraphView {
-  func boxViewWithID(_ id: String) -> BoxView? {
+  func existingBoxView(with id: String) -> BoxView? {
     return self.subviews.first(where: { view in
       if let view = view as? BoxView, view.id == id { return true }
       else { return false }
