@@ -39,7 +39,7 @@
 		012F1DB7245ECC9A00ACAFF0 /* SwiftFlowExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwiftFlowExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		012F1DBB245ECC9A00ACAFF0 /* SwiftFlowExampleTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftFlowExampleTests.swift; sourceTree = "<group>"; };
 		012F1DBD245ECC9A00ACAFF0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		012F1DCA245ECF7400ACAFF0 /* SwiftFlow */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftFlow; path = ../SwiftFlow; sourceTree = "<group>"; };
+		01B2EBC4245EE74C00C9187D /* SwiftFlow */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftFlow; path = ..; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -64,7 +64,7 @@
 		012F1D98245ECC9600ACAFF0 = {
 			isa = PBXGroup;
 			children = (
-				012F1DCA245ECF7400ACAFF0 /* SwiftFlow */,
+				01B2EBC4245EE74C00C9187D /* SwiftFlow */,
 				012F1DA3245ECC9600ACAFF0 /* SwiftFlowExample */,
 				012F1DBA245ECC9A00ACAFF0 /* SwiftFlowExampleTests */,
 				012F1DA2245ECC9600ACAFF0 /* Products */,
