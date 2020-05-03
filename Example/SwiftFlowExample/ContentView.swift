@@ -7,10 +7,10 @@ struct ContentView: View {
     let graph = Graph()
 
     var blueConfig = NodeConfig()
-    blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00) // #CFF5FF
+    blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00)
 
     var redConfig = NodeConfig()
-    redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00) // #FFCCD0
+    redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00)
 
     graph.nodeConfig = blueConfig
 
