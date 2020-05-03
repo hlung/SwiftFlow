@@ -5,6 +5,7 @@
 - Define data in arrays of flow. 
 - Live editing (with SwiftUI live preview).
 - Good for small to medium sized flowcharts.
+- Try out in [example project](Example/SwiftFlowExample/ContentView.swift).
 
 ## Introduction
 
