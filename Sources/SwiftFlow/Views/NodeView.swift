@@ -1,6 +1,6 @@
 import UIKit
 
-public class NodeView: UIView {
+class NodeView: UIView {
   public let view: UIView
   public let shape: NodeShape
 
@@ -8,7 +8,10 @@ public class NodeView: UIView {
   public var id: String? // change to Node
   public let config: NodeConfig
 
-  // Customizables
+  convenience init(node: Node, config: NodeConfig) {
+    self.init(Label(node.title), shape: node.shape, config: config)
+    self.id = node.id
+  }
 
   public init(_ view: UIView, shape: NodeShape, config: NodeConfig) {
     self.view = view
@@ -91,12 +94,5 @@ public class NodeView: UIView {
     view.layoutIfNeeded()
     return CGSize(width: view.intrinsicContentSize.width - view.layoutMargins.left - view.layoutMargins.right,
                   height: view.intrinsicContentSize.height - view.layoutMargins.top - view.layoutMargins.bottom)
-  }
-}
-
-public extension NodeView {
-  convenience init(node: Node, config: NodeConfig) {
-    self.init(Label(node.title), shape: node.shape, config: config)
-    self.id = node.id
   }
 }

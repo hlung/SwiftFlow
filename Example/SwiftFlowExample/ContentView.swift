@@ -1,21 +1,16 @@
 import SwiftUI
 import SwiftFlow
 
-// TODO: validate features
-// TODO: add some tests
-// TODO: remove unused code
-// TODO: create demo gif
-
 struct ContentView: View {
   var body: some View {
 
     let graph = Graph()
 
     var blueConfig = NodeConfig()
-    blueConfig.backgroundColor = UIColor(hex: "CFF5FF")
+    blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00) // #CFF5FF
 
     var redConfig = NodeConfig()
-    redConfig.backgroundColor = UIColor(hex: "FFCCD0")
+    redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00) // #FFCCD0
 
     graph.nodeConfig = blueConfig
 
@@ -39,7 +34,11 @@ struct ContentView: View {
       NodeShortcut(id: "end"),
     ])
 
-    return GraphViewWrapper(graph: graph)
+    let graphView = GraphView()
+    graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    try! graphView.draw(graph)
+
+    return UIViewCenteringWrapper(contentView: graphView)
   }
 }
 
@@ -49,24 +48,20 @@ struct ContentView_Previews: PreviewProvider {
   }
 }
 
-struct GraphViewWrapper: UIViewRepresentable {
-  var graph: Graph
-  var containerView = UIView()
-  var graphView = GraphView()
+struct UIViewCenteringWrapper: UIViewRepresentable {
+  let contentView: UIView
+  let containerView = UIView()
 
   func makeUIView(context: Context) -> UIView {
-    containerView.backgroundColor = UIColor(hex: "EAEAEA")
+    containerView.backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00) // #EAEAEA
 
-    graphView.layoutMargins = UIEdgeInsets(shrinkingBy: 20)
-    containerView.addSubview(graphView)
+    containerView.addSubview(contentView)
     var constraints: [NSLayoutConstraint] = []
     constraints += [
-      graphView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
-      graphView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
+      contentView.centerXAnchor.constraint(equalTo: containerView.centerXAnchor),
+      contentView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor),
     ]
     NSLayoutConstraint.activate(constraints)
-
-    try! graphView.draw(graph)
 
     return containerView
   }

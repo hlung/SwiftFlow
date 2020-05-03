@@ -1,5 +1,18 @@
 import UIKit
 
+public enum GraphDrawError: Error {
+  // Graph
+  case graphIsEmpty
+  // Node
+  case duplicatedNodeId
+  case noStartNode
+  case danglingNode
+  // NodeShortcut
+  case shortcutNodeNotFound
+  // Arrow
+  case danglingArrow
+}
+
 public extension GraphView {
 
   func draw(_ graph: Graph) throws {
@@ -7,7 +20,7 @@ public extension GraphView {
     var constraints: [NSLayoutConstraint] = []
 
     for flow in graph.flows {
-      guard !flow.isEmpty else { throw GraphViewError.graphIsEmpty }
+      guard !flow.isEmpty else { throw GraphDrawError.graphIsEmpty }
 
       var flow = flow
       var savedNodeView: NodeView
@@ -21,12 +34,12 @@ public extension GraphView {
       }
       else if let firstShortcut = flow.first as? NodeShortcut {
         guard let view = self.existingNodeView(with: firstShortcut.id) else {
-          throw GraphViewError.shortcutNodeNotFound
+          throw GraphDrawError.shortcutNodeNotFound
         }
         savedNodeView = view
       }
       else {
-        throw GraphViewError.noStartNode
+        throw GraphDrawError.noStartNode
       }
 
       // If last element is an arrow, add a dummy node to show drawing progress
@@ -40,14 +53,14 @@ public extension GraphView {
         let e = flow[index]
 
         if let arrow = e as? Arrow {
-          guard savedArrow == nil else { throw GraphViewError.danglingArrow }
+          guard savedArrow == nil else { throw GraphDrawError.danglingArrow }
           savedArrow = arrow
           continue
         }
 
         if let node = e as? Node {
-          guard self.existingNodeView(with: node.id) == nil else { throw GraphViewError.duplicatedNodeId }
-          guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
+          guard self.existingNodeView(with: node.id) == nil else { throw GraphDrawError.duplicatedNodeId }
+          guard let arrow = savedArrow else { throw GraphDrawError.danglingNode }
           let nodeView = NodeView(node: node, config: node.config ?? graph.nodeConfig)
           self.addView(nodeView)
 
@@ -67,9 +80,9 @@ public extension GraphView {
           savedArrow = nil
         }
         else if let shortcut = e as? NodeShortcut {
-          guard let arrow = savedArrow else { throw GraphViewError.danglingNode }
+          guard let arrow = savedArrow else { throw GraphDrawError.danglingNode }
           guard let nodeView = self.existingNodeView(with: shortcut.id) else {
-            throw GraphViewError.shortcutNodeNotFound
+            throw GraphDrawError.shortcutNodeNotFound
           }
 
           let plan = ArrowDrawingPlan(startView: savedNodeView,
@@ -172,12 +185,9 @@ public extension GraphView {
 
 }
 
-private extension CGPoint {
-  func x(_ value: CGFloat) -> CGPoint {
-    CGPoint(x: x+value, y: y)
-  }
-
-  func y(_ value: CGFloat) -> CGPoint {
-    CGPoint(x: x, y: y+value)
-  }
+private extension CGRect {
+  var centerBottom: CGPoint { CGPoint(x: midX, y: maxY) }
+  var centerTop: CGPoint { CGPoint(x: midX, y: minY) }
+  var centerLeft: CGPoint { CGPoint(x: minX, y: midY) }
+  var centerRight: CGPoint { CGPoint(x: maxX, y: midY) }
 }

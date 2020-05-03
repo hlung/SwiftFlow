@@ -1,15 +1,6 @@
 import UIKit
 
-public extension CAShapeLayer {
-  class func arrow(from: CGPoint, to: CGPoint, config: ArrowConfig) -> CAShapeLayer {
-    let path = UIBezierPath.arrow(from: from, to: to, config: config)
-    let layer = CAShapeLayer()
-    layer.path = path.cgPath
-    return layer
-  }
-}
-
-public extension UIBezierPath {
+extension UIBezierPath {
   static func arrow(from start: CGPoint, to end: CGPoint, config: ArrowConfig) -> UIBezierPath {
     let length = hypot(end.x - start.x, end.y - start.y)
     let tailLength = length - config.headLength
@@ -33,5 +24,14 @@ public extension UIBezierPath {
     path.closeSubpath()
 
     return self.init(cgPath: path)
+  }
+}
+
+extension CAShapeLayer {
+  class func arrow(from: CGPoint, to: CGPoint, config: ArrowConfig) -> CAShapeLayer {
+    let path = UIBezierPath.arrow(from: from, to: to, config: config)
+    let layer = CAShapeLayer()
+    layer.path = path.cgPath
+    return layer
   }
 }

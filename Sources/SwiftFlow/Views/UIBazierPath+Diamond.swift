@@ -1,6 +1,6 @@
 import UIKit
 
-public extension UIBezierPath {
+extension UIBezierPath {
   static func diamond(_ bounds: CGRect, inset: CGFloat) -> UIBezierPath {
     let path = UIBezierPath()
     path.move(to: CGPoint(x: bounds.midX, y: bounds.minY + inset))
