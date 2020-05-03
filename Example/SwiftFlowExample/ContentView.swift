@@ -48,7 +48,7 @@ struct ContentView_Previews: PreviewProvider {
   }
 }
 
-struct UIViewCenteringWrapper: UIViewRepresentable {
+private struct UIViewCenteringWrapper: UIViewRepresentable {
   let contentView: UIView
   let containerView = UIView()
 
