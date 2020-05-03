@@ -8,10 +8,15 @@ import SwiftFlow
 
 struct ContentView: View {
   var body: some View {
+
     let graph = Graph()
 
     var blueConfig = NodeConfig()
     blueConfig.backgroundColor = UIColor(hex: "CFF5FF")
+
+    var redConfig = NodeConfig()
+    redConfig.backgroundColor = UIColor(hex: "FFCCD0")
+
     graph.nodeConfig = blueConfig
 
     graph.addFlow([
@@ -23,9 +28,6 @@ struct ContentView: View {
       Arrow(),
       Node(.pill, title: "End", id: "end"),
     ])
-
-    var redConfig = NodeConfig()
-    redConfig.backgroundColor = UIColor(hex: "FFCCD0")
 
     graph.addFlow([
       NodeShortcut(id: "success"),
@@ -64,7 +66,7 @@ struct GraphViewWrapper: UIViewRepresentable {
     ]
     NSLayoutConstraint.activate(constraints)
 
-    try? graphView.draw(graph)
+    try! graphView.draw(graph)
 
     return containerView
   }
