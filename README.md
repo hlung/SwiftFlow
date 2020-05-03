@@ -22,49 +22,43 @@
 
 ### Input Swift code
 ```swift
-import SwiftUI
 import SwiftFlow
+```
 
-struct ContentView: View {
-  var body: some View {
+```swift
+let graph = Graph()
 
-    let graph = Graph()
+var blueConfig = NodeConfig()
+blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00) // #CFF5FF
 
-    var blueConfig = NodeConfig()
-    blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00) // #CFF5FF
+var redConfig = NodeConfig()
+redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00) // #FFCCD0
 
-    var redConfig = NodeConfig()
-    redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00) // #FFCCD0
+graph.nodeConfig = blueConfig
 
-    graph.nodeConfig = blueConfig
+graph.addFlow([
+  Node(.pill, title: "Start"),
+  Arrow(.down),
+  Node(.diamond, title: "Work\nsuccess?", id: "success"),
+  Arrow(.down, title: "Yes"),
+  Node(.rect, title: "Go Party!"),
+  Arrow(),
+  Node(.pill, title: "End", id: "end"),
+])
 
-    graph.addFlow([
-      Node(.pill, title: "Start"),
-      Arrow(.down),
-      Node(.diamond, title: "Work\nsuccess?", id: "success"),
-      Arrow(.down, title: "Yes"),
-      Node(.rect, title: "Go Party!"),
-      Arrow(),
-      Node(.pill, title: "End", id: "end"),
-    ])
+graph.addFlow([
+  NodeShortcut(id: "success"),
+  Arrow(.right, title: "No"),
+  Node(.rect, title: "Cry", config: redConfig),
+  Arrow(),
+  Node(.rect, title: "Go home"),
+  Arrow(),
+  NodeShortcut(id: "end"),
+])
 
-    graph.addFlow([
-      NodeShortcut(id: "success"),
-      Arrow(.right, title: "No"),
-      Node(.rect, title: "Cry", config: redConfig),
-      Arrow(),
-      Node(.rect, title: "Go home"),
-      Arrow(),
-      NodeShortcut(id: "end"),
-    ])
-
-    let graphView = GraphView()
-    graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-    try! graphView.draw(graph)
-
-    return UIViewCenteringWrapper(contentView: graphView)
-  }
-}
+let graphView = GraphView()
+graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+try! graphView.draw(graph)
 ```
   
 ### Output Flowchart
