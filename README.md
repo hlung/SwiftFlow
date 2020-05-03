@@ -1,11 +1,14 @@
 # SwiftFlow
 
 ## Features
-- Draw flowchart in Swift!
-- Define data in arrays of flow. 
-- Live editing (with SwiftUI live preview).
+- Draw flowchart in Swift! 🚀
+- Define data in arrays of flow.
+- Live editing (with SwiftUI live preview). 
 - Good for small to medium sized flowcharts.
 - Try out in [example project](Example/SwiftFlowExample/ContentView.swift).
+
+## How to use
+- Install "SwiftFlow" using [Swift Package Manager in Xcode](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
 
 ## Introduction
 
@@ -93,16 +96,12 @@ try! graphView.draw(graph)
 ![Output](images/output2.png)
 
 
-## How to use
-- Install with Swift Package Manager
-
-
 ## Future plans 💡
 This project is stil new. Feel free to suggest features and fixes. 🙂
 - allow multiple arrows in same direction
 - add font/fontSize to NodeConfig
 - markdown syntax parser into SwiftFlow syntax
-
+- merge arrow heads 🏹
 
 ## Other Notes
 - I know some other library has the same name, like https://github.com/Swift-Kit/Swift-Flow . But I still prefer this name.
