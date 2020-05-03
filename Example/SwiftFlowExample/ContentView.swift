@@ -17,21 +17,21 @@ struct ContentView: View {
     graph.addFlow([
       Node(.pill, title: "Start"),
       Arrow(.down),
-      Node(.diamond, title: "Work\nsuccess?", id: "success"),
+      Node(.diamond, title: "Work\nsuccess?", id: "success"), // declares id for later reference
       Arrow(.down, title: "Yes"),
       Node(.rect, title: "Go Party!"),
-      Arrow(),
-      Node(.pill, title: "End", id: "end"),
+      Arrow(.down),
+      Node(.pill, title: "End", id: "end")
     ])
 
     graph.addFlow([
-      NodeShortcut(id: "success"),
+      NodeShortcut(id: "success"), // refers back to the Node above
       Arrow(.right, title: "No"),
       Node(.rect, title: "Cry", config: redConfig),
-      Arrow(),
+      Arrow(.down),
       Node(.rect, title: "Go home"),
-      Arrow(),
-      NodeShortcut(id: "end"),
+      Arrow(.down),
+      NodeShortcut(id: "end")
     ])
 
     let graphView = GraphView()
