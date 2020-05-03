@@ -1,19 +1,19 @@
 import UIKit
 
 class NodeView: UIView {
-  public let view: UIView
-  public let shape: NodeShape
+  let view: UIView
+  let shape: NodeShape
 
   // node
-  public var id: String? // change to Node
-  public let config: NodeConfig
+  var id: String? // change to Node
+  let config: NodeConfig
 
   convenience init(node: Node, config: NodeConfig) {
     self.init(Label(node.title), shape: node.shape, config: config)
     self.id = node.id
   }
 
-  public init(_ view: UIView, shape: NodeShape, config: NodeConfig) {
+  init(_ view: UIView, shape: NodeShape, config: NodeConfig) {
     self.view = view
     self.shape = shape
     self.config = config
@@ -55,7 +55,7 @@ class NodeView: UIView {
     NSLayoutConstraint.activate(constraints)
   }
 
-  public override func layoutSubviews() {
+  override func layoutSubviews() {
     super.layoutSubviews()
     switch shape {
     case .rect:
@@ -90,7 +90,7 @@ class NodeView: UIView {
     return "[NodeView frame = \(frame), subviews = \(subviews)]"
   }
 
-  public override var intrinsicContentSize: CGSize {
+  override var intrinsicContentSize: CGSize {
     view.layoutIfNeeded()
     return CGSize(width: view.intrinsicContentSize.width - view.layoutMargins.left - view.layoutMargins.right,
                   height: view.intrinsicContentSize.height - view.layoutMargins.top - view.layoutMargins.bottom)
