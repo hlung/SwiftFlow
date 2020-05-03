@@ -1,15 +1,15 @@
 //
-//  SwiftFlowTests.swift
-//  SwiftFlowTests
+//  SwiftFlowExampleTests.swift
+//  SwiftFlowExampleTests
 //
 //  Created by Kolyutsakul, Thongchai on 3/5/20.
 //  Copyright © 2020 Thongchai Kolyutsakul. All rights reserved.
 //
 
 import XCTest
-@testable import SwiftFlow
+@testable import SwiftFlowExample
 
-class SwiftFlowTests: XCTestCase {
+class SwiftFlowExampleTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
