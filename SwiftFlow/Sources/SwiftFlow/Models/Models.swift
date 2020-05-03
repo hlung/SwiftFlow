@@ -18,6 +18,8 @@ public class Graph {
 
 public protocol GraphElement {}
 
+public struct DummyNode: GraphElement {}
+
 public struct Node: GraphElement, CustomStringConvertible {
   public let shape: NodeShape
   public let title: String

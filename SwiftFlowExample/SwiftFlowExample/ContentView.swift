@@ -4,21 +4,15 @@ import SwiftFlow
 // TODO: validate features
 // TODO: add some tests
 // TODO: remove unused code
+// TODO: create demo gif
 
 struct ContentView: View {
   var body: some View {
-    var blueNodeConfig = NodeConfig()
-    blueNodeConfig.backgroundColor = UIColor(hex: "9EE5FF")
-
-    var redNodeConfig = NodeConfig()
-    redNodeConfig.backgroundColor = UIColor(hex: "FFCCD0")
-
     let graph = Graph()
-    graph.nodeConfig = blueNodeConfig
 
-//    graph.addFlow([
-//      Node(.pill, title: "Start"),
-//    ])
+    var blueConfig = NodeConfig()
+    blueConfig.backgroundColor = UIColor(hex: "CFF5FF")
+    graph.nodeConfig = blueConfig
 
     graph.addFlow([
       Node(.pill, title: "Start"),
@@ -26,19 +20,22 @@ struct ContentView: View {
       Node(.diamond, title: "Work\nsuccess?", id: "success"),
       Arrow(.down, title: "Yes"),
       Node(.rect, title: "Go Party!"),
-      Arrow(.down),
+      Arrow(),
       Node(.pill, title: "End", id: "end"),
     ])
 
-//    graph.addFlow([
-//      NodeShortcut(id: "success"),
-//      Arrow(.right, title: "No"),
-//      Node(.rect, title: "Cry", config: redNodeConfig),
-//      Arrow(.down),
-//      Node(.rect, title: "Go home"),
-//      Arrow(.down),
-//      NodeShortcut(id: "end"),
-//    ])
+    var redConfig = NodeConfig()
+    redConfig.backgroundColor = UIColor(hex: "FFCCD0")
+
+    graph.addFlow([
+      NodeShortcut(id: "success"),
+      Arrow(.right, title: "No"),
+      Node(.rect, title: "Cry", config: redConfig),
+      Arrow(),
+      Node(.rect, title: "Go home"),
+      Arrow(),
+      NodeShortcut(id: "end"),
+    ])
 
     return GraphViewWrapper(graph: graph)
   }
