@@ -20,7 +20,7 @@ public struct EdgeOffsets {
     self.right = value
   }
 
-  public static func offset(from: EdgeOffsets, to: EdgeOffsets, direction: Direction) -> CGFloat {
+  public static func distance(from: EdgeOffsets, to: EdgeOffsets, direction: Direction) -> CGFloat {
     switch direction {
     case .up: return from.top + to.bottom
     case .left: return from.left + to.right

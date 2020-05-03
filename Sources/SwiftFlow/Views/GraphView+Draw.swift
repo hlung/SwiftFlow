@@ -42,7 +42,7 @@ public extension GraphView {
         throw GraphDrawError.noStartNode
       }
 
-      // If last element is an arrow, add a dummy node to show drawing progress
+      // If last element is an arrow, add a dummy node to allow drawing last dangling arrow.
       if let _ = flow.last as? Arrow {
         let dummyNode = DummyNode()
         flow.append(dummyNode)
@@ -64,9 +64,9 @@ public extension GraphView {
           let nodeView = NodeView(node: node, config: node.config ?? graph.nodeConfig)
           self.addView(nodeView)
 
-          let offset = EdgeOffsets.offset(from: savedNodeView.config.edgeOffsets,
-                                          to: nodeView.config.edgeOffsets,
-                                          direction: arrow.direction)
+          let offset = EdgeOffsets.distance(from: savedNodeView.config.edgeOffsets,
+                                            to: nodeView.config.edgeOffsets,
+                                            direction: arrow.direction)
           constraints += savedNodeView.constraints(direction: arrow.direction,
                                                    to: nodeView,
                                                    offset: offset)
@@ -93,14 +93,14 @@ public extension GraphView {
           savedNodeView = nodeView
           savedArrow = nil
         }
-        else if let _ = e as? DummyNode, let arrow = savedArrow {
+        else if e is DummyNode, let arrow = savedArrow {
           let nodeView = NodeView(node: Node(.pill, title: ""), config: NodeConfig())
           nodeView.isHidden = true
           self.addView(nodeView)
 
-          let offset = EdgeOffsets.offset(from: savedNodeView.config.edgeOffsets,
-                                          to: nodeView.config.edgeOffsets,
-                                          direction: arrow.direction)
+          let offset = EdgeOffsets.distance(from: savedNodeView.config.edgeOffsets,
+                                            to: nodeView.config.edgeOffsets,
+                                            direction: arrow.direction)
           constraints += savedNodeView.constraints(direction: arrow.direction,
                                                    to: nodeView,
                                                    offset: offset)
