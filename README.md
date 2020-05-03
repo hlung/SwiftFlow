@@ -7,8 +7,8 @@
 - Good for small to medium sized flowcharts.
 - Try out in [example project](Example/SwiftFlowExample/ContentView.swift).
 
-## How to use
-- Install "SwiftFlow" using [Swift Package Manager in Xcode](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app).
+## Installation
+- Use [Swift Package Manager](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). 📦 In Xcode, go to menu `File > Swift Packages > Add Package Dependency...`, and search for "SwiftFlow" library.
 
 ## Introduction
 
@@ -26,11 +26,11 @@ We could have done it better! 💪
 
 ### Comparison with [mermaid](https://mermaidjs.github.io/#/) 🧜‍♀️
 
-Upon some research, the only popular way to write flowcharts in code is by using a 😫 "JavaScript" 😫 library called **mermaid**. (with a [live editor](https://mermaid-js.github.io/mermaid-live-editor) you can try.)
-At first glance it is very powerful. It can draw not only flowcharts, but may other types of diagrams. But I find there are many problems...
+After some research, I found one JavaScript😫 library for drawing flowchart in code called **mermaid**. (There's a [live editor](https://mermaid-js.github.io/mermaid-live-editor) you can try.)
+At first glance it is very powerful. It can draw not only flowcharts, but may other types of diagrams. But I find there are some problems for drawing flowchart...
 
-- **Node duplication** - The syntax is **link**-based, meaning each declaration includes 2 nodes and 1 arrow ( e.g. `A --> B`, `B --> C`, `C --> D` ). So in a long flowchart, most of the nodes will appear  twice (`B` and `C` in this case). This won't happen if the syntax is **flow** based ( e.g. `A --> B --> C --> D` ). Since most nodes will be referenced only once, except at the intersections, I think using **flow**-based syntax is more suitable.
-- **Ugly new line** - Need to use `<br />` 😫.
+- **Node duplication** - The syntax is **link**-based, meaning each declaration includes 2 nodes and 1 arrow ( `A --> B`, `B --> C`, `C --> D` ). In a long flowchart, most nodes will appear  twice (`B` and `C`), which is very redundant. This won't happen if the syntax is **flow** based ( `A --> B --> C --> D` ) because most nodes will be referenced only once, except at the intersections. I think using **flow**-based syntax is cleaner and faster to write.
+- **Ugly new line** - Need to use `<br />` 😫. I could just be `\n`.
 - **Arrow is long** - It uses `-->` for an arrow. It could have been just `->` or `>`. This adds up with the link-based syntax mentioned.
 - **Cannot specify arrow direction** - The graph declaration at the top dictates the arrow direction, e.g. `graph TD` means going from "top to bottom".
 
