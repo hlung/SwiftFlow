@@ -25,8 +25,7 @@ public extension GraphView {
 
       var flow = flow
       var savedNodeView: NodeView
-      var savedArrow: Arrow? = nil
-      var savedArrowLoopBack: ArrowLoopBack? = nil
+      var savedArrow: ArrowProviding? = nil
 
       // Draw first node
       if let firstNode = flow.first as? Node {
@@ -54,13 +53,9 @@ public extension GraphView {
       for index in 1..<flow.count {
         let e = flow[index]
 
-        if let arrow = e as? Arrow {
+        if let arrow = e as? ArrowProviding {
           if savedArrow != nil { throw GraphDrawError.danglingArrow }
           savedArrow = arrow
-        }
-        else if let arrow = e as? ArrowLoopBack {
-          if savedArrowLoopBack != nil { throw GraphDrawError.danglingArrowLoopBack }
-          savedArrowLoopBack = arrow
         }
         else if let node = e as? Node {
           if self.existingNodeView(with: node.id) != nil { throw GraphDrawError.duplicatedNodeId }
@@ -82,7 +77,6 @@ public extension GraphView {
 
           savedNodeView = nodeView
           savedArrow = nil
-          savedArrowLoopBack = nil
         }
         else if let shortcut = e as? NodeShortcut {
           guard let nodeView = self.existingNodeView(with: shortcut.id) else {
@@ -97,13 +91,12 @@ public extension GraphView {
 
             savedNodeView = nodeView
             savedArrow = nil
-            savedArrowLoopBack = nil
           }
-//          else if let arrow = savedArrow {
-////            let plan = ArrowDrawingPlan(startView: savedNodeView,
-////                                        endView: nodeView,
-////                                        arrow: arrow)
-////            arrowDrawingPlans.append(plan)
+//          else if let arrow = savedArrowLoopBack {
+//            let plan = ArrowDrawingPlan(startView: savedNodeView,
+//                                        endView: nodeView,
+//                                        arrow: arrow)
+//            arrowDrawingPlans.append(plan)
 //
 //            savedNodeView = nodeView
 //            savedArrow = nil
@@ -149,14 +142,48 @@ public extension GraphView {
 
     addLabel(with: plan, config: config, startView: startView)
 
-    let layer: CAShapeLayer
-    let line = arrowPoints(plan.arrow.direction, startView, endView)
+    if let arrow = plan.arrow as? Arrow {
+      // Draw arrow
+      let line = createLine(between: startView, and: endView, in: arrow.direction)
+      let arrowLayer = CAShapeLayer()
+      let path = UIBezierPath.arrow(line: line, config: config)
+      arrowLayer.path = path.cgPath
+      arrowLayer.fillColor = config.color.cgColor
+      self.layer.addSublayer(arrowLayer)
+    }
+    else if let arrow = plan.arrow as? ArrowLoopBack {
+      let line = createLine(onSameSideOf: startView, and: endView, in: arrow.direction)
 
-    layer = CAShapeLayer.arrow(line: line, config: config)
-    self.layer.addSublayer(layer)
+      // Define 4 points that the loop back line will pass
+      let p1 = line.from
+      let p2 = line.from.offset(arrow.direction, for: config.loopBackOffset)
+      let p3 = line.to.offset(arrow.direction, for: config.loopBackOffset)
+      let p4 = line.to
+
+      // Add line to start of arrow, in another layer.
+      // Because the arrow drawing code I found doesn't use strokeColor :/
+      let lineLayer = CAShapeLayer()
+      let linePath = UIBezierPath()
+      linePath.move(to: p1)
+      linePath.addLine(to: p2)
+      linePath.addLine(to: p3)
+      lineLayer.path = linePath.cgPath
+      lineLayer.lineWidth = config.tailWidth
+      lineLayer.strokeColor = config.color.cgColor
+      lineLayer.fillColor = nil
+      lineLayer.opacity = 1.0
+      self.layer.addSublayer(lineLayer)
+
+      // Draw final straight arrow to the end
+      let arrowLayer = CAShapeLayer()
+      let path = UIBezierPath.arrow(line: Line(p3, p4), config: config)
+      arrowLayer.path = path.cgPath
+      arrowLayer.fillColor = config.color.cgColor
+      self.layer.addSublayer(arrowLayer)
+    }
   }
 
-  private func arrowPoints(_ direction: Direction, _ startView: UIView, _ endView: UIView) -> Line {
+  private func createLine(between startView: UIView, and endView: UIView, in direction: Direction) -> Line {
     let from: CGPoint
     let to: CGPoint
     switch direction {
@@ -172,6 +199,26 @@ public extension GraphView {
     case .left:
       from = startView.frame.centerLeft
       to = endView.frame.centerRight
+    }
+    return Line(from, to)
+  }
+
+  private func createLine(onSameSideOf startView: UIView, and endView: UIView, in direction: Direction) -> Line {
+    let from: CGPoint
+    let to: CGPoint
+    switch direction {
+    case .up:
+      from = startView.frame.centerTop
+      to = endView.frame.centerTop
+    case .right:
+      from = startView.frame.centerRight
+      to = endView.frame.centerRight
+    case .down:
+      from = startView.frame.centerBottom
+      to = endView.frame.centerBottom
+    case .left:
+      from = startView.frame.centerLeft
+      to = endView.frame.centerLeft
     }
     return Line(from, to)
   }
@@ -207,6 +254,17 @@ public extension GraphView {
       ]
     }
     NSLayoutConstraint.activate(labelConstraints)
+  }
+}
+
+private extension CGPoint {
+  func offset(_ direction: Direction, for offset: CGFloat) -> CGPoint {
+    switch direction {
+    case .up: return CGPoint(x: x, y: y - offset)
+    case .right: return CGPoint(x: x + offset, y: y)
+    case .down: return CGPoint(x: x, y: y + offset)
+    case .left: return CGPoint(x: x - offset, y: y)
+    }
   }
 }
 

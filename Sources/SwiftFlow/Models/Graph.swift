@@ -53,7 +53,13 @@ public struct NodeShortcut: GraphElement, CustomStringConvertible {
   }
 }
 
-public struct Arrow: GraphElement, CustomStringConvertible {
+public protocol ArrowProviding {
+  var direction: Direction { get }
+  var title: String? { get }
+  var config: ArrowConfig? { get }
+}
+
+public struct Arrow: GraphElement, ArrowProviding, CustomStringConvertible {
   public let direction: Direction
   public let title: String?
   public let config: ArrowConfig?
@@ -71,8 +77,8 @@ public struct Arrow: GraphElement, CustomStringConvertible {
   }
 }
 
-public struct ArrowLoopBack: GraphElement, CustomStringConvertible {
-  public let direction: Direction
+public struct ArrowLoopBack: GraphElement, ArrowProviding, CustomStringConvertible {
+  public let direction: Direction // offset direction
   public let title: String?
   public let config: ArrowConfig?
 

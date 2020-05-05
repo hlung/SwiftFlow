@@ -34,14 +34,14 @@ struct ContentView: View {
       NodeShortcut(id: "end")
     ])
 
-//    graph.addFlow([
-//      NodeShortcut(id: "party"), // refers back to the Node above
-//      Arrow(.left),
-//      NodeShortcut(id: "success")
-//    ])
+    graph.addFlow([
+      NodeShortcut(id: "party"), // refers back to the Node above
+      ArrowLoopBack(.left),
+      NodeShortcut(id: "success")
+    ])
 
     let graphView = GraphView()
-    graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+    graphView.layoutMargins = UIEdgeInsets(top: 20, left: 50, bottom: 20, right: 50)
     try! graphView.draw(graph)
 
     return UIViewCenteringWrapper(contentView: graphView)
