@@ -17,9 +17,9 @@ struct ContentView: View {
     graph.addFlow([
       Node(.pill, title: "Start"),
       Arrow(.down),
-      Node(.diamond, title: "Work\nsuccess?", id: "success"), // declares id for later reference
+      Node(.diamond, title: "Work\nsuccess?", id: "success"), // declare id for later reference
       Arrow(.down, title: "Yes"),
-      Node(.rect, title: "Go Party!"),
+      Node(.rect, title: "Go Party!", id: "party"),
       Arrow(.down),
       Node(.pill, title: "End", id: "end")
     ])
@@ -33,6 +33,12 @@ struct ContentView: View {
       Arrow(.down),
       NodeShortcut(id: "end")
     ])
+
+//    graph.addFlow([
+//      NodeShortcut(id: "party"), // refers back to the Node above
+//      Arrow(.left),
+//      NodeShortcut(id: "success")
+//    ])
 
     let graphView = GraphView()
     graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)

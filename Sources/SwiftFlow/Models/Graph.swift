@@ -1,4 +1,4 @@
-import Foundation
+import UIKit
 
 public class Graph {
   public var flows: [[GraphElement]] = []
@@ -68,5 +68,33 @@ public struct Arrow: GraphElement, CustomStringConvertible {
     self.direction = direction
     self.title = title
     self.config = config
+  }
+}
+
+public struct ArrowLoopBack: GraphElement, CustomStringConvertible {
+  public let direction: Direction
+  public let title: String?
+  public let config: ArrowConfig?
+
+  public var description: String {
+    return "[ArrowLoopBack \(direction) title \(title ?? "-")]"
+  }
+
+  public init(_ direction: Direction = .down,
+              title: String? = nil,
+              config: ArrowConfig? = nil) {
+    self.direction = direction
+    self.title = title
+    self.config = config
+  }
+}
+
+public struct Line {
+  public let from: CGPoint
+  public let to: CGPoint
+
+  public init(_ from: CGPoint, _ to: CGPoint) {
+    self.from = from
+    self.to = to
   }
 }
