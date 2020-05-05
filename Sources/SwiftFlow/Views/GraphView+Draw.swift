@@ -183,6 +183,9 @@ public extension GraphView {
     }
   }
 
+  // Example:
+  // Direction.right = [startView] -> [endView]
+  // Direction.left  = [startView] <- [endView]
   private func createLine(between startView: UIView, and endView: UIView, in direction: Direction) -> Line {
     let from: CGPoint
     let to: CGPoint
@@ -203,6 +206,10 @@ public extension GraphView {
     return Line(from, to)
   }
 
+  // Example:
+  // Direction.left  =  ---[startView]
+  //                    |
+  //                    -->[endView]
   private func createLine(onSameSideOf startView: UIView, and endView: UIView, in direction: Direction) -> Line {
     let from: CGPoint
     let to: CGPoint
