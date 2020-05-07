@@ -1,5 +1,7 @@
 # SwiftFlow
 
+![demo](images/demo.gif)
+
 ## Features
 - Draw flowchart in Swift! 🚀
 - Define data in arrays of flow.
