@@ -22,7 +22,7 @@ public extension GraphView {
     var constraints: [NSLayoutConstraint] = []
 
     for flow in graph.flows {
-      guard !flow.isEmpty else { throw GraphDrawError.graphIsEmpty }
+      guard !flow.isEmpty else { return }
 
       var flow = flow
       var savedNodeView: NodeView

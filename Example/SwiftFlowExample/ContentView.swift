@@ -14,7 +14,6 @@ struct ContentView: View {
 
     graph.nodeConfig = blueConfig
 
-    // setup flows
     graph.addFlow([
       Node("Start", shape: .pill),
       Arrow(.down),
@@ -58,7 +57,7 @@ private struct UIViewCenteringWrapper: UIViewRepresentable {
   let containerView = UIView()
 
   func makeUIView(context: Context) -> UIView {
-    containerView.backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00) // #EAEAEA
+    containerView.backgroundColor = UIColor(red: 0.92, green: 0.92, blue: 0.92, alpha: 1.00)
 
     containerView.addSubview(contentView)
     var constraints: [NSLayoutConstraint] = []
