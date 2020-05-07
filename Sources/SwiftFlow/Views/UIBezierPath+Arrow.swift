@@ -1,5 +1,5 @@
-extension UIBezierPath {
-  static func arrow(line: Line, config: ArrowConfig) -> UIBezierPath {
+extension SFBezierPath {
+  static func arrow(line: Line, config: ArrowConfig) -> SFBezierPath {
     let start = line.from
     let end = line.to
     let length = hypot(end.x - start.x, end.y - start.y)
@@ -29,7 +29,7 @@ extension UIBezierPath {
 
 extension CAShapeLayer {
   class func arrow(line: Line, config: ArrowConfig) -> CAShapeLayer {
-    let path = UIBezierPath.arrow(line: line, config: config)
+    let path = SFBezierPath.arrow(line: line, config: config)
     let layer = CAShapeLayer()
     layer.path = path.cgPath
     return layer

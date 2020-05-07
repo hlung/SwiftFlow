@@ -135,7 +135,7 @@ public extension GraphView {
       // Draw arrow
       let line = createLine(between: startView, and: endView, in: arrow.direction)
       let arrowLayer = CAShapeLayer()
-      let path = UIBezierPath.arrow(line: line, config: config)
+      let path = SFBezierPath.arrow(line: line, config: config)
       arrowLayer.path = path.cgPath
       arrowLayer.fillColor = config.color.cgColor
       self.layer.addSublayer(arrowLayer)
@@ -154,7 +154,7 @@ public extension GraphView {
       // Add line to start of arrow, in another layer.
       // Because the arrow drawing code I found doesn't use strokeColor :/
       let lineLayer = CAShapeLayer()
-      let linePath = UIBezierPath()
+      let linePath = SFBezierPath()
       linePath.move(to: p1)
       linePath.addLine(to: p2)
       linePath.addLine(to: p3)
@@ -167,7 +167,7 @@ public extension GraphView {
 
       // Draw final straight arrow to the end
       let arrowLayer = CAShapeLayer()
-      let path = UIBezierPath.arrow(line: Line(p3, p4), config: config)
+      let path = SFBezierPath.arrow(line: Line(p3, p4), config: config)
       arrowLayer.path = path.cgPath
       arrowLayer.fillColor = config.color.cgColor
       self.layer.addSublayer(arrowLayer)

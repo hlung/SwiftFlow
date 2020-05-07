@@ -68,12 +68,12 @@ class NodeView: SFView {
 
     case .diamond:
       let maskLayer = CAShapeLayer()
-      maskLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
+      maskLayer.path = SFBezierPath.diamond(self.bounds, inset: 0).cgPath
       self.layer.mask = maskLayer
 
       let strokeLayer = CAShapeLayer()
       strokeLayer.lineWidth = 1.0
-      strokeLayer.path = UIBezierPath.diamond(self.bounds, inset: strokeLayer.lineWidth).cgPath
+      strokeLayer.path = SFBezierPath.diamond(self.bounds, inset: strokeLayer.lineWidth).cgPath
       strokeLayer.strokeColor = SFColor.black.cgColor
       strokeLayer.fillColor = SFColor.clear.cgColor
       self.layer.addSublayer(strokeLayer)
