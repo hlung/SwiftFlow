@@ -21,21 +21,21 @@ public protocol GraphElement {}
 struct DummyNode: GraphElement {}
 
 public struct Node: GraphElement, CustomStringConvertible {
-  public let shape: NodeShape
   public let title: String
+  public let shape: NodeShape
   public let id: String
   public let config: NodeConfig?
 
   public var description: String {
-    return "[Node \(shape) title: \(title) id: \(id)]"
+    return "[Node \"\(title)\" shape: \(shape) id: \(id)]"
   }
 
-  public init(_ shape: NodeShape,
-              title: String,
+  public init(_ title: String,
+              shape: NodeShape = .rect,
               id: String = UUID().uuidString,
               config: NodeConfig? = nil) {
-    self.shape = shape
     self.title = title
+    self.shape = shape
     self.id = id
     self.config = config
   }

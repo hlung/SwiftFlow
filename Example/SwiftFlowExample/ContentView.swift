@@ -16,21 +16,21 @@ struct ContentView: View {
 
     // setup flows
     graph.addFlow([
-      Node(.pill, title: "Start"),
+      Node("Start", shape: .pill),
       Arrow(.down),
-      Node(.diamond, title: "Work\nsuccess?", id: "success"), // declare id for later reference
+      Node("Work\nsuccess?", shape: .diamond, id: "success"), // declare id for later reference
       Arrow(.down, title: "Yes"),
-      Node(.rect, title: "Go Party!", id: "party"),
+      Node("Go Party!", shape: .rect, id: "party"),
       Arrow(.down),
-      Node(.pill, title: "End", id: "end")
+      Node("End", shape: .pill, id: "end")
     ])
 
     graph.addFlow([
       NodeShortcut(id: "success"), // refers back to the Node above
       Arrow(.right, title: "No"), // branch out to the right side
-      Node(.rect, title: "Cry", config: redConfig), // different color using config
+      Node("Cry", shape: .rect, config: redConfig), // different color using config
       Arrow(.down),
-      Node(.rect, title: "Go home", id: "home"),
+      Node("Go home", shape: .rect, id: "home"),
     ])
 
     graph.addFlow([

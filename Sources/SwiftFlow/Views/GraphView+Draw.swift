@@ -95,7 +95,7 @@ public extension GraphView {
           }
         }
         else if e is DummyNode, let arrow = savedArrow {
-          let nodeView = NodeView(node: Node(.pill, title: ""), config: NodeConfig())
+          let nodeView = NodeView(node: Node("", shape: .pill), config: NodeConfig())
           nodeView.isHidden = true
           self.addView(nodeView)
 
