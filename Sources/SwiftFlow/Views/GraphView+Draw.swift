@@ -92,16 +92,6 @@ public extension GraphView {
             savedNodeView = nodeView
             savedArrow = nil
           }
-//          else if let arrow = savedArrowLoopBack {
-//            let plan = ArrowDrawingPlan(startView: savedNodeView,
-//                                        endView: nodeView,
-//                                        arrow: arrow)
-//            arrowDrawingPlans.append(plan)
-//
-//            savedNodeView = nodeView
-//            savedArrow = nil
-//            savedArrowLoopBack = nil
-//          }
         }
         else if e is DummyNode, let arrow = savedArrow {
           let nodeView = NodeView(node: Node(.pill, title: ""), config: NodeConfig())
@@ -152,13 +142,15 @@ public extension GraphView {
       self.layer.addSublayer(arrowLayer)
     }
     else if let arrow = plan.arrow as? ArrowLoopBack {
-      let line = createLine(onSameSideOf: startView, and: endView, in: arrow.direction)
+      let p1 = startView.frame.centerPoint(in: arrow.direction)
+      let p4 = endView.frame.centerPoint(in: arrow.endDirection)
 
-      // Define 4 points that the loop back line will pass
-      let p1 = line.from
-      let p2 = line.from.offset(arrow.direction, for: config.loopBackOffset)
-      let p3 = line.to.offset(arrow.direction, for: config.loopBackOffset)
-      let p4 = line.to
+      var p2 = p1.offset(arrow.direction, for: config.startOffset)
+      var p3 = p4.offset(arrow.endDirection, for: config.endOffset)
+
+      if arrow.direction == arrow.endDirection {
+        alignPoints(&p2, &p3, arrow.direction)
+      }
 
       // Add line to start of arrow, in another layer.
       // Because the arrow drawing code I found doesn't use strokeColor :/
@@ -183,51 +175,21 @@ public extension GraphView {
     }
   }
 
+  private func alignPoints(_ p1: inout CGPoint, _ p2: inout CGPoint, _ direction: Direction) {
+    switch direction {
+    case .up:     p1.y = min(p1.x, p2.x); p2.y = min(p1.x, p2.x)
+    case .left:   p1.x = min(p1.x, p2.x); p2.x = min(p1.x, p2.x)
+    case .down:   p1.y = max(p1.x, p2.x); p2.y = max(p1.x, p2.x)
+    case .right:  p1.x = max(p1.x, p2.x); p2.x = max(p1.x, p2.x)
+    }
+  }
+
   // Example:
   // Direction.right = [startView] -> [endView]
   // Direction.left  = [startView] <- [endView]
   private func createLine(between startView: UIView, and endView: UIView, in direction: Direction) -> Line {
-    let from: CGPoint
-    let to: CGPoint
-    switch direction {
-    case .up:
-      from = startView.frame.centerTop
-      to = endView.frame.centerBottom
-    case .right:
-      from = startView.frame.centerRight
-      to = endView.frame.centerLeft
-    case .down:
-      from = startView.frame.centerBottom
-      to = endView.frame.centerTop
-    case .left:
-      from = startView.frame.centerLeft
-      to = endView.frame.centerRight
-    }
-    return Line(from, to)
-  }
-
-  // Example:
-  // Direction.left  =  ---[startView]
-  //                    |
-  //                    -->[endView]
-  private func createLine(onSameSideOf startView: UIView, and endView: UIView, in direction: Direction) -> Line {
-    let from: CGPoint
-    let to: CGPoint
-    switch direction {
-    case .up:
-      from = startView.frame.centerTop
-      to = endView.frame.centerTop
-    case .right:
-      from = startView.frame.centerRight
-      to = endView.frame.centerRight
-    case .down:
-      from = startView.frame.centerBottom
-      to = endView.frame.centerBottom
-    case .left:
-      from = startView.frame.centerLeft
-      to = endView.frame.centerLeft
-    }
-    return Line(from, to)
+    return Line(startView.frame.centerPoint(in: direction),
+                endView.frame.centerPoint(in: direction.opposite))
   }
 
   private func addLabel(with plan: ArrowDrawingPlan, config: ArrowConfig, startView: UIView) {
@@ -280,4 +242,13 @@ private extension CGRect {
   var centerTop: CGPoint { CGPoint(x: midX, y: minY) }
   var centerLeft: CGPoint { CGPoint(x: minX, y: midY) }
   var centerRight: CGPoint { CGPoint(x: maxX, y: midY) }
+
+  func centerPoint(in direction: Direction) -> CGPoint {
+    switch direction {
+    case .up: return centerTop
+    case .left: return centerLeft
+    case .down: return centerBottom
+    case .right: return centerRight
+    }
+  }
 }

@@ -12,7 +12,8 @@ public struct ArrowConfig {
   public var tailWidth: CGFloat = 2
   public var headWidth: CGFloat = 7
   public var headLength: CGFloat = 7
-  public var loopBackOffset: CGFloat = 20
+  public var startOffset: CGFloat = 20
+  public var endOffset: CGFloat = 20
   public var color: UIColor = .black
 
   public init() {}

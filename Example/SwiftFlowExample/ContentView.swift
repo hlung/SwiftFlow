@@ -29,15 +29,13 @@ struct ContentView: View {
       Arrow(.right, title: "No"),
       Node(.rect, title: "Cry", config: redConfig),
       Arrow(.down),
-      Node(.rect, title: "Go home"),
-      Arrow(.down),
-      NodeShortcut(id: "end")
+      Node(.rect, title: "Go home", id: "home"),
     ])
 
     graph.addFlow([
-      NodeShortcut(id: "party"), // refers back to the Node above
-      ArrowLoopBack(.left),
-      NodeShortcut(id: "success")
+      NodeShortcut(id: "home"),
+      ArrowLoopBack(from: .bottom, to: .right),
+      NodeShortcut(id: "end")
     ])
 
     let graphView = GraphView()
