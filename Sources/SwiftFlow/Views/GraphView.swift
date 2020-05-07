@@ -1,5 +1,3 @@
-import UIKit
-
 public class GraphView: SFView {
   public init() {
     super.init(frame: .zero)

@@ -1,5 +1,3 @@
-import UIKit
-
 public class Graph {
   public var flows: [[GraphElement]] = []
   public var nodeConfig = NodeConfig()

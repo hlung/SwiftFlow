@@ -1,5 +1,3 @@
-import UIKit
-
 extension SFView {
   func constraints(direction: Direction, to view: SFView, offset: CGFloat = 0) -> [NSLayoutConstraint] {
     switch direction {

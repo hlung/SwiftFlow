@@ -1,5 +1,3 @@
-import UIKit
-
 class Label: UILabel {
   public init(_ text: String) {
     super.init(frame: .zero)

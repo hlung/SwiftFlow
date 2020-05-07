@@ -1,7 +1,9 @@
 #if canImport(UIKit)
 import UIKit
-typealias SFView = UIView
+public typealias SFView = UIView
+public typealias SFColor = UIColor
 #else
 import AppKit
-typealias SFView = NSView
+public typealias SFView = NSView
+public typealias SFColor = NSColor
 #endif

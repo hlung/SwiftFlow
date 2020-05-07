@@ -1,5 +1,3 @@
-import UIKit
-
 extension UIBezierPath {
   static func arrow(line: Line, config: ArrowConfig) -> UIBezierPath {
     let start = line.from

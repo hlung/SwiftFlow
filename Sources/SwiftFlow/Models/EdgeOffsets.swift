@@ -1,4 +1,4 @@
-import UIKit
+import CoreGraphics
 
 public struct EdgeOffsets {
   public let top: CGFloat

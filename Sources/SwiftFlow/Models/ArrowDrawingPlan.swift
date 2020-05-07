@@ -1,5 +1,3 @@
-import UIKit
-
 class ArrowDrawingPlan {
   public let startView: SFView
   public let endView: SFView

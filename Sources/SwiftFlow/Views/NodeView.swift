@@ -1,5 +1,3 @@
-import UIKit
-
 class NodeView: SFView {
   let view: SFView
   let shape: NodeShape
@@ -61,12 +59,12 @@ class NodeView: SFView {
     case .rect:
       self.layer.cornerRadius = 0
       self.layer.borderWidth = 1.0
-      self.layer.borderColor = UIColor.black.cgColor
+      self.layer.borderColor = SFColor.black.cgColor
 
     case .pill:
       self.layer.cornerRadius = self.layer.bounds.height / 2
       self.layer.borderWidth = 1.0
-      self.layer.borderColor = UIColor.black.cgColor
+      self.layer.borderColor = SFColor.black.cgColor
 
     case .diamond:
       let maskLayer = CAShapeLayer()
@@ -76,8 +74,8 @@ class NodeView: SFView {
       let strokeLayer = CAShapeLayer()
       strokeLayer.lineWidth = 1.0
       strokeLayer.path = UIBezierPath.diamond(self.bounds, inset: strokeLayer.lineWidth).cgPath
-      strokeLayer.strokeColor = UIColor.black.cgColor
-      strokeLayer.fillColor = UIColor.clear.cgColor
+      strokeLayer.strokeColor = SFColor.black.cgColor
+      strokeLayer.fillColor = SFColor.clear.cgColor
       self.layer.addSublayer(strokeLayer)
     }
   }

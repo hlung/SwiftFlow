@@ -1,5 +1,3 @@
-import UIKit
-
 public enum GraphDrawError: Error {
   // Graph
   case graphIsEmpty

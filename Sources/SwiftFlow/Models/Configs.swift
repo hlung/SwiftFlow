@@ -1,8 +1,8 @@
-import UIKit
+import CoreGraphics
 
 public struct NodeConfig {
-  public var backgroundColor: UIColor = .clear
-  public var borderColor: UIColor = .black
+  public var backgroundColor: SFColor = .clear
+  public var borderColor: SFColor = .black
   public var edgeOffsets = EdgeOffsets(allSides: 20)
 
   public init() {}
@@ -14,7 +14,7 @@ public struct ArrowConfig {
   public var headLength: CGFloat = 7
   public var startOffset: CGFloat = 20
   public var endOffset: CGFloat = 20
-  public var color: UIColor = .black
+  public var color: SFColor = .black
 
   public init() {}
 }

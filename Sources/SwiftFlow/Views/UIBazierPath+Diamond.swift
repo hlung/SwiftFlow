@@ -1,4 +1,4 @@
-import UIKit
+import CoreGraphics
 
 extension UIBezierPath {
   static func diamond(_ bounds: CGRect, inset: CGFloat) -> UIBezierPath {
