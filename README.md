@@ -64,13 +64,13 @@ redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1
 
 graph.nodeConfig = blueConfig
 
-// Set up graph elements
+// setup flows
 graph.addFlow([
   Node(.pill, title: "Start"),
   Arrow(.down),
-  Node(.diamond, title: "Work\nsuccess?", id: "success"), // declares id for later reference
+  Node(.diamond, title: "Work\nsuccess?", id: "success"), // declare id for later reference
   Arrow(.down, title: "Yes"),
-  Node(.rect, title: "Go Party!"),
+  Node(.rect, title: "Go Party!", id: "party"),
   Arrow(.down),
   Node(.pill, title: "End", id: "end")
 ])
@@ -80,8 +80,12 @@ graph.addFlow([
   Arrow(.right, title: "No"), // branch out to the right side
   Node(.rect, title: "Cry", config: redConfig), // different color using config
   Arrow(.down),
-  Node(.rect, title: "Go home"),
-  Arrow(.down),
+  Node(.rect, title: "Go home", id: "home"),
+])
+
+graph.addFlow([
+  NodeShortcut(id: "home"),
+  ArrowLoopBack(from: .bottom, to: .right),
   NodeShortcut(id: "end")
 ])
 

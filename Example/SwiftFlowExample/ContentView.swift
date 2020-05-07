@@ -14,6 +14,7 @@ struct ContentView: View {
 
     graph.nodeConfig = blueConfig
 
+    // setup flows
     graph.addFlow([
       Node(.pill, title: "Start"),
       Arrow(.down),
@@ -26,8 +27,8 @@ struct ContentView: View {
 
     graph.addFlow([
       NodeShortcut(id: "success"), // refers back to the Node above
-      Arrow(.right, title: "No"),
-      Node(.rect, title: "Cry", config: redConfig),
+      Arrow(.right, title: "No"), // branch out to the right side
+      Node(.rect, title: "Cry", config: redConfig), // different color using config
       Arrow(.down),
       Node(.rect, title: "Go home", id: "home"),
     ])
