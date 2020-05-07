@@ -7,7 +7,7 @@
 - Define data in arrays of flow.
 - Live editing (with SwiftUI live preview). 
 - Good for small to medium sized flowcharts.
-- Try out in [example project](Example/SwiftFlowExample/ContentView.swift).
+- Try out in [example project](https://github.com/hlung/SwiftFlowExample).
 
 ## Installation
 - Search for "SwiftFlow" library in [Swift Packages](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) in Xcode 📦 
