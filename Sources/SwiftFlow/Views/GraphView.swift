@@ -1,6 +1,6 @@
 import UIKit
 
-public class GraphView: UIView {
+public class GraphView: SFView {
   public init() {
     super.init(frame: .zero)
     translatesAutoresizingMaskIntoConstraints = false
@@ -15,7 +15,7 @@ public class GraphView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func addView(_ nodeView: UIView) {
+  func addView(_ nodeView: SFView) {
     super.addSubview(nodeView)
 
     // Graph - Node constraints

@@ -1,7 +1,7 @@
 import UIKit
 
-class NodeView: UIView {
-  let view: UIView
+class NodeView: SFView {
+  let view: SFView
   let shape: NodeShape
 
   // node
@@ -13,7 +13,7 @@ class NodeView: UIView {
     self.id = node.id
   }
 
-  init(_ view: UIView, shape: NodeShape, config: NodeConfig) {
+  init(_ view: SFView, shape: NodeShape, config: NodeConfig) {
     self.view = view
     self.shape = shape
     self.config = config

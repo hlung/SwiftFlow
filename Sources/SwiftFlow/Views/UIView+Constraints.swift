@@ -1,7 +1,7 @@
 import UIKit
 
-extension UIView {
-  func constraints(direction: Direction, to view: UIView, offset: CGFloat = 0) -> [NSLayoutConstraint] {
+extension SFView {
+  func constraints(direction: Direction, to view: SFView, offset: CGFloat = 0) -> [NSLayoutConstraint] {
     switch direction {
     case .up:
       return [

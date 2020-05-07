@@ -128,8 +128,8 @@ public extension GraphView {
 
   private func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {
     let config = plan.arrow.config ?? defaultConfig
-    let startView: UIView = plan.startView
-    let endView: UIView = plan.endView
+    let startView: SFView = plan.startView
+    let endView: SFView = plan.endView
 
     addLabel(with: plan, config: config, startView: startView)
 
@@ -188,12 +188,12 @@ public extension GraphView {
   // Example:
   // Direction.right = [startView] -> [endView]
   // Direction.left  = [startView] <- [endView]
-  private func createLine(between startView: UIView, and endView: UIView, in direction: Direction) -> Line {
+  private func createLine(between startView: SFView, and endView: SFView, in direction: Direction) -> Line {
     return Line(startView.frame.centerPoint(in: direction),
                 endView.frame.centerPoint(in: direction.opposite))
   }
 
-  private func addLabel(with plan: ArrowDrawingPlan, config: ArrowConfig, startView: UIView) {
+  private func addLabel(with plan: ArrowDrawingPlan, config: ArrowConfig, startView: SFView) {
     guard let title = plan.arrow.title else { return }
     let label = Label(title)
     label.font = .systemFont(ofSize: 14)
