@@ -1,5 +1,7 @@
 # SwiftFlow
 
+![demo](https://user-images.githubusercontent.com/652167/81291197-edaba080-909b-11ea-9320-159b535751fd.gif)
+
 ## Features
 - Draw flowchart in Swift! 🚀
 - Define data in arrays of flow.
@@ -101,7 +103,7 @@ try! graphView.draw(graph)
 ```
 
 ### Output:
-![Output](images/output.png)
+![output](https://user-images.githubusercontent.com/652167/81291213-f2705480-909b-11ea-9206-f3648cfac730.png)
 
 
 ## Future plans 💡
