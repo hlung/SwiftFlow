@@ -8,7 +8,7 @@
 - Try out in [example project](Example/SwiftFlowExample/ContentView.swift).
 
 ## Installation
-- Use [Swift Package Manager](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). 📦 In Xcode, go to menu `File > Swift Packages > Add Package Dependency...`, and search for "SwiftFlow" library.
+- Search for "SwiftFlow" library in [Swift Package Manager](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). 📦 
 
 ## Introduction
 
