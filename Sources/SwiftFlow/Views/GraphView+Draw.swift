@@ -16,6 +16,7 @@ public enum GraphDrawError: Error {
 
 public extension GraphView {
 
+  /// Where the magic happens ✨
   func draw(_ graph: Graph) throws {
     var arrowDrawingPlans: [ArrowDrawingPlan] = []
     var constraints: [NSLayoutConstraint] = []

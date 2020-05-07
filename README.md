@@ -93,7 +93,7 @@ try! graphView.draw(graph)
 ```
 
 ### Output:
-![Output](images/output2.png)
+![Output](images/output.png)
 
 
 ## Future plans 💡
