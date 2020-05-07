@@ -8,9 +8,13 @@
 - Try out in [example project](Example/SwiftFlowExample/ContentView.swift).
 
 ## Installation
-- Search for "SwiftFlow" library in [Swift Package Manager](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app). 📦 
+- Search for "SwiftFlow" library in [Swift Packages](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) in Xcode 📦 
 
-## Introduction
+## Requirements
+
+- iOS 13 and above
+
+## Story
 
 I often draw a flowchart to help understand some complex logic. It can also serves as a reference document for other engineers and testers.
 To draw one, I usually use popular tools like https://docs.google.com/drawings or https://app.diagrams.net/. 
