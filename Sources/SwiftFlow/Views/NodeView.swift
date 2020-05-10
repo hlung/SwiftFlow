@@ -1,5 +1,11 @@
-class NodeView: SFView {
-  let view: SFView
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
+
+class NodeView: UIView {
+  let view: UIView
   let shape: NodeShape
 
   // node
@@ -11,7 +17,7 @@ class NodeView: SFView {
     self.id = node.id
   }
 
-  init(_ view: SFView, shape: NodeShape, config: NodeConfig) {
+  init(_ view: UIView, shape: NodeShape, config: NodeConfig) {
     self.view = view
     self.shape = shape
     self.config = config
@@ -57,26 +63,44 @@ class NodeView: SFView {
     super.layoutSubviews()
     switch shape {
     case .rect:
+      #if canImport(UIKit)
       self.layer.cornerRadius = 0
       self.layer.borderWidth = 1.0
-      self.layer.borderColor = SFColor.black.cgColor
+      self.layer.borderColor = UIColor.black.cgColor
+      #else
+      self.layer?.cornerRadius = 0
+      self.layer?.borderWidth = 1.0
+      self.layer?.borderColor = UIColor.black.cgColor
+      #endif
+
 
     case .pill:
+      #if canImport(UIKit)
       self.layer.cornerRadius = self.layer.bounds.height / 2
       self.layer.borderWidth = 1.0
-      self.layer.borderColor = SFColor.black.cgColor
+      self.layer.borderColor = UIColor.black.cgColor
+      #else
+      self.layer?.cornerRadius = (self.layer?.bounds.height ?? 0) / 2
+      self.layer?.borderWidth = 1.0
+      self.layer?.borderColor = UIColor.black.cgColor
+      #endif
+
 
     case .diamond:
       let maskLayer = CAShapeLayer()
-      maskLayer.path = SFBezierPath.diamond(self.bounds, inset: 0).cgPath
+      maskLayer.path = UIBezierPath.diamond(self.bounds, inset: 0).cgPath
+      #if canImport(UIKit)
       self.layer.mask = maskLayer
+      #else
+      self.layer?.mask = maskLayer
+      #endif
 
       let strokeLayer = CAShapeLayer()
       strokeLayer.lineWidth = 1.0
-      strokeLayer.path = SFBezierPath.diamond(self.bounds, inset: strokeLayer.lineWidth).cgPath
-      strokeLayer.strokeColor = SFColor.black.cgColor
-      strokeLayer.fillColor = SFColor.clear.cgColor
-      self.layer.addSublayer(strokeLayer)
+      strokeLayer.path = UIBezierPath.diamond(self.bounds, inset: strokeLayer.lineWidth).cgPath
+      strokeLayer.strokeColor = UIColor.black.cgColor
+      strokeLayer.fillColor = UIColor.clear.cgColor
+      self.addSublayer(strokeLayer)
     }
   }
 

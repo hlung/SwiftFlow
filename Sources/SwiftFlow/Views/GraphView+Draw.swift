@@ -1,3 +1,9 @@
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
+
 public enum GraphDrawError: Error {
   // Graph
   case graphIsEmpty
@@ -126,8 +132,8 @@ public extension GraphView {
 
   private func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {
     let config = plan.arrow.config ?? defaultConfig
-    let startView: SFView = plan.startView
-    let endView: SFView = plan.endView
+    let startView: UIView = plan.startView
+    let endView: UIView = plan.endView
 
     addLabel(with: plan, config: config, startView: startView)
 
@@ -135,10 +141,10 @@ public extension GraphView {
       // Draw arrow
       let line = createLine(between: startView, and: endView, in: arrow.direction)
       let arrowLayer = CAShapeLayer()
-      let path = SFBezierPath.arrow(line: line, config: config)
+      let path = UIBezierPath.arrow(line: line, config: config)
       arrowLayer.path = path.cgPath
       arrowLayer.fillColor = config.color.cgColor
-      self.layer.addSublayer(arrowLayer)
+      self.addSublayer(arrowLayer)
     }
     else if let arrow = plan.arrow as? ArrowLoopBack {
       let p1 = startView.frame.centerPoint(in: arrow.direction)
@@ -154,7 +160,7 @@ public extension GraphView {
       // Add line to start of arrow, in another layer.
       // Because the arrow drawing code I found doesn't use strokeColor :/
       let lineLayer = CAShapeLayer()
-      let linePath = SFBezierPath()
+      let linePath = UIBezierPath()
       linePath.move(to: p1)
       linePath.addLine(to: p2)
       linePath.addLine(to: p3)
@@ -163,14 +169,14 @@ public extension GraphView {
       lineLayer.strokeColor = config.color.cgColor
       lineLayer.fillColor = nil
       lineLayer.opacity = 1.0
-      self.layer.addSublayer(lineLayer)
+      self.addSublayer(lineLayer)
 
       // Draw final straight arrow to the end
       let arrowLayer = CAShapeLayer()
-      let path = SFBezierPath.arrow(line: Line(p3, p4), config: config)
+      let path = UIBezierPath.arrow(line: Line(p3, p4), config: config)
       arrowLayer.path = path.cgPath
       arrowLayer.fillColor = config.color.cgColor
-      self.layer.addSublayer(arrowLayer)
+      self.addSublayer(arrowLayer)
     }
   }
 
@@ -186,12 +192,12 @@ public extension GraphView {
   // Example:
   // Direction.right = [startView] -> [endView]
   // Direction.left  = [startView] <- [endView]
-  private func createLine(between startView: SFView, and endView: SFView, in direction: Direction) -> Line {
+  private func createLine(between startView: UIView, and endView: UIView, in direction: Direction) -> Line {
     return Line(startView.frame.centerPoint(in: direction),
                 endView.frame.centerPoint(in: direction.opposite))
   }
 
-  private func addLabel(with plan: ArrowDrawingPlan, config: ArrowConfig, startView: SFView) {
+  private func addLabel(with plan: ArrowDrawingPlan, config: ArrowConfig, startView: UIView) {
     guard let title = plan.arrow.title else { return }
     let label = Label(title)
     label.font = .systemFont(ofSize: 14)

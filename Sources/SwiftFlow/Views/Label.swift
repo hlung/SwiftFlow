@@ -1,3 +1,9 @@
+#if canImport(UIKit)
+import UIKit
+#else
+import AppKit
+#endif
+
 class Label: UILabel {
   public init(_ text: String) {
     super.init(frame: .zero)
@@ -12,8 +18,12 @@ class Label: UILabel {
     self.setContentCompressionResistancePriority(.required, for: .vertical)
   }
 
+//  required init?(coder: NSCoder) {
+//    super.init(coder: coder)
+//  }
+
   required init?(coder: NSCoder) {
-    super.init(coder: coder)
+    fatalError("init(coder:) has not been implemented")
   }
 
   public override var description: String {

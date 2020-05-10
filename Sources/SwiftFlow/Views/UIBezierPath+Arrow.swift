@@ -1,5 +1,8 @@
-extension SFBezierPath {
-  static func arrow(line: Line, config: ArrowConfig) -> SFBezierPath {
+import CoreGraphics
+import QuartzCore
+
+extension UIBezierPath {
+  static func arrow(line: Line, config: ArrowConfig) -> UIBezierPath {
     let start = line.from
     let end = line.to
     let length = hypot(end.x - start.x, end.y - start.y)
@@ -23,13 +26,15 @@ extension SFBezierPath {
     path.addLines(between: points, transform: transform)
     path.closeSubpath()
 
-    return self.init(cgPath: path)
+    let result = self.init()
+    result.cgPath = path
+    return result
   }
 }
 
 extension CAShapeLayer {
   class func arrow(line: Line, config: ArrowConfig) -> CAShapeLayer {
-    let path = SFBezierPath.arrow(line: line, config: config)
+    let path = UIBezierPath.arrow(line: line, config: config)
     let layer = CAShapeLayer()
     layer.path = path.cgPath
     return layer
