@@ -17,20 +17,8 @@ public class GraphView: UIView {
     fatalError("init(coder:) has not been implemented")
   }
 
-  func addView(_ nodeView: UIView) {
-    super.addSubview(nodeView)
-
-    // Graph - Node constraints
-    NSLayoutConstraint.activate([
-      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: nodeView.topAnchor),
-      layoutMarginsGuide.leftAnchor.constraint(lessThanOrEqualTo: nodeView.leftAnchor),
-      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: nodeView.bottomAnchor),
-      layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: nodeView.rightAnchor),
-    ])
-  }
-
   /// Where the magic happens ✨
-  func render(_ graph: Graph) throws {
+  public func draw(_ graph: Graph) throws {
     var arrowDrawingPlans: [ArrowDrawingPlan] = []
     var constraints: [NSLayoutConstraint] = []
 
@@ -137,6 +125,16 @@ public class GraphView: UIView {
     for plan in arrowDrawingPlans {
       self.addArrow(plan, defaultConfig: graph.arrowConfig)
     }
+  }
+
+  private func addView(_ nodeView: UIView) {
+    super.addSubview(nodeView)
+    NSLayoutConstraint.activate([
+      layoutMarginsGuide.topAnchor.constraint(lessThanOrEqualTo: nodeView.topAnchor),
+      layoutMarginsGuide.leftAnchor.constraint(lessThanOrEqualTo: nodeView.leftAnchor),
+      layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: nodeView.bottomAnchor),
+      layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: nodeView.rightAnchor),
+    ])
   }
 
   private func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {

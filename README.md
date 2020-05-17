@@ -57,7 +57,7 @@ let graphView = GraphView()
 graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 
 // render the graph!
-try! graphView.render(graph)
+try! graphView.draw(graph)
 ```
 
 ### Live preview in action with SwiftUI
@@ -103,7 +103,7 @@ We can do it better! 💪
 - `GraphElement` - A protocol that all above types conforms to.
 - `Graph` - This is the central piece that holds all information on how to draw the flowchart. 
   - You call `addFlow(_:)` which takes `[GraphElement]`. Typically, the array be a sequence of "`Node`, `Arrow`, `Node`, `Arrow`, ...".
-  - Finally, you pass this type into `GraphView` and call `graphView.render(graph)` to draw the view.
+  - Finally, you pass this type into `GraphView` and call `graphView.draw(graph)` to draw the view.
 
 ### Layout
 

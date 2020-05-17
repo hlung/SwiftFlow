@@ -35,7 +35,7 @@ final class SwiftFlowTests: XCTestCase {
     XCTAssertEqual(graph.flows[2].count, 3)
 
     let graphView = GraphView()
-    try! graphView.render(graph)
+    try! graphView.draw(graph)
 
     XCTAssertEqual(graphView.subviews.count, 8)
 
