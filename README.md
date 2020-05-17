@@ -29,30 +29,6 @@ Moreover, with the new SwiftUI, we can see **live previews** of the flowchart as
 
 We could have done it better! 💪
 
-## Design
-
-### Comparison with [mermaid](https://mermaidjs.github.io/#/) 🧜‍♀️
-
-After some research, I found one JavaScript😫 library for drawing flowchart in code called **mermaid**. (There's a [live editor](https://mermaid-js.github.io/mermaid-live-editor) you can try.)
-At first glance it is very powerful. It can draw not only flowcharts, but may other types of diagrams. But I find there are some problems for drawing flowchart...
-
-- **Node duplication** - The syntax is **link**-based, meaning each declaration includes 2 nodes and 1 arrow ( `A --> B`, `B --> C`, `C --> D` ). In a long flowchart, most nodes will appear  twice (`B` and `C`), which is very redundant. This won't happen if the syntax is **flow** based ( `A --> B --> C --> D` ) because most nodes will be referenced only once, except at the intersections. I think using **flow**-based syntax is cleaner and faster to write.
-- **Ugly new line** - Need to use `<br />` 😫. I could just be `\n`.
-- **Arrow is long** - It uses `-->` for an arrow. It could have been just `->` or `>`. This adds up with the link-based syntax mentioned.
-- **Cannot specify arrow direction** - The graph declaration at the top dictates the arrow direction, e.g. `graph TD` means going from "top to bottom".
-
-### Data modeling
-
-- At top level, we have a `GraphView` that takes a `Graph` object which holds all information about the flowchart.
-- We set up the `Graph` by adding arrays of `GraphElement` conformed types, which includes `Node`, `NodeShortcut`, and `Arrow`.
-- Each `Node` can be customized using `NodeConfig`, like background and border color.
-
-### Layout
-
-- I use **autolayout** to put the nodes in place. The arrows, on the other hand, are drawn directly using exact coordinates derived from nodes already laid out.
-- In the example project, the `GraphView` is wrapped in SwiftUI's `UIViewRepresentable` type to enable live preview.
-- I use iOS `UIKit` instead of `AppKit` because I'm more familiar with iOS development. It could be rewritten if needed for a macOS app.
-
 ## Example
 
 ### Input Swift code:
@@ -105,6 +81,35 @@ try! graphView.draw(graph)
 
 ### Output:
 ![output](https://user-images.githubusercontent.com/652167/81291213-f2705480-909b-11ea-9206-f3648cfac730.png)
+
+##
+
+
+
+## Technical details
+
+### Comparison with [mermaid](https://mermaidjs.github.io/#/) 🧜‍♀️
+
+After some research, I found one JavaScript😫 library for drawing flowchart in code called **mermaid**. (There's a [live editor](https://mermaid-js.github.io/mermaid-live-editor) you can try.)
+At first glance it is very powerful. It can draw not only flowcharts, but may other types of diagrams. But I find there are some problems for drawing flowchart...
+
+- **Node duplication** - The syntax is **link**-based, meaning each declaration includes 2 nodes and 1 arrow ( `A --> B`, `B --> C`, `C --> D` ). In a long flowchart, most nodes will appear  twice (`B` and `C`), which is very redundant. This won't happen if the syntax is **flow** based ( `A --> B --> C --> D` ) because most nodes will be referenced only once, except at the intersections. I think using **flow**-based syntax is cleaner and faster to write.
+- **Ugly new line** - Need to use `<br />` 😫. I could just be `\n`.
+- **Arrow is long** - It uses `-->` for an arrow. It could have been just `->` or `>`. This adds up with the link-based syntax mentioned.
+- **Cannot specify arrow direction** - The graph declaration at the top dictates the arrow direction, e.g. `graph TD` means going from "top to bottom".
+
+### Data modeling
+
+- At top level, we have a `GraphView` that takes a `Graph` object which holds all information about the flowchart.
+- We set up the `Graph` by adding arrays of `GraphElement` conformed types, which includes `Node`, `NodeShortcut`, and `Arrow`.
+- Each `Node` can be customized using `NodeConfig`, like background and border color.
+
+### Layout
+
+- I use **autolayout** to put the nodes in place. The arrows, on the other hand, are drawn directly using exact coordinates derived from nodes already laid out.
+- In the example project, the `GraphView` is wrapped in SwiftUI's `UIViewRepresentable` type to enable live preview.
+- I use iOS `UIKit` instead of `AppKit` because I'm more familiar with iOS development. It could be rewritten if needed for a macOS app.
+
 
 
 ## Future plans 💡
