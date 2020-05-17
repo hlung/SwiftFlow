@@ -13,7 +13,7 @@
 
 Generate this flow chart:
 
-![output](https://user-images.githubusercontent.com/652167/81291213-f2705480-909b-11ea-9206-f3648cfac730.png)
+![demo](https://user-images.githubusercontent.com/652167/82152746-fbc8a080-9895-11ea-82dd-59316491a9a4.gif)
 
 From this code:
 
