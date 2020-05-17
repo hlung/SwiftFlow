@@ -1,5 +1,3 @@
-# SwiftFlow
-
 ![logo](https://user-images.githubusercontent.com/652167/82144157-36701000-9879-11ea-94f4-eb576f007c4d.png)
 
 - Draw flowchart in Swift! 🚀
