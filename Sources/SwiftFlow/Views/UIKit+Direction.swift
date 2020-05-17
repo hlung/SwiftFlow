@@ -41,24 +41,31 @@ extension UIView {
     switch direction {
     case .up:
       return [
-        topAnchor.constraint(equalTo: view.bottomAnchor, constant: offset),
+        topAnchor.constraint(greaterThanOrEqualTo: view.bottomAnchor, constant: offset),
         centerXAnchor.constraint(equalTo: view.centerXAnchor),
       ]
     case .left:
       return [
-        leftAnchor.constraint(equalTo: view.rightAnchor, constant: offset),
+        leftAnchor.constraint(greaterThanOrEqualTo: view.rightAnchor, constant: offset),
         centerYAnchor.constraint(equalTo: view.centerYAnchor),
       ]
     case .down:
       return [
-        bottomAnchor.constraint(equalTo: view.topAnchor, constant: -offset),
+        bottomAnchor.constraint(lessThanOrEqualTo: view.topAnchor, constant: -offset),
         centerXAnchor.constraint(equalTo: view.centerXAnchor),
       ]
     case .right:
       return [
-        rightAnchor.constraint(equalTo: view.leftAnchor, constant: -offset),
+        rightAnchor.constraint(lessThanOrEqualTo: view.leftAnchor, constant: -offset),
         centerYAnchor.constraint(equalTo: view.centerYAnchor),
       ]
     }
+  }
+}
+
+extension NSLayoutConstraint {
+  func priority(_ priority: UILayoutPriority) -> NSLayoutConstraint {
+    self.priority = priority
+    return self
   }
 }

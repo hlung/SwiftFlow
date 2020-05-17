@@ -65,6 +65,41 @@ final class SwiftFlowTests: XCTestCase {
     XCTAssertNil(notExistingView)
   }
 
+  func test_drawing_graph_with_collision() {
+    let graph = Graph()
+
+    graph.addFlow([
+      Node("Work\nsuccess?", shape: .diamond, id: "success"), // declare id for later reference
+      Arrow(.down, title: "Yes"),
+      Node("Go Party! Go Party! Go Party!", shape: .rect, id: "party"),
+    ])
+
+    graph.addFlow([
+      NodeShortcut(id: "success"), // refers back to the Node above
+      Arrow(.right, title: "No"), // branch out to the right side
+      Node("Cry", shape: .rect, id: "cry"), // different color using config
+      Arrow(.down),
+      Node("Go home\nGo home", shape: .rect, id: "home"),
+    ])
+
+    XCTAssertEqual(graph.flows.count, 2)
+    XCTAssertEqual(graph.flows[0].count, 3)
+    XCTAssertEqual(graph.flows[1].count, 5)
+
+    let graphView = GraphView()
+    try! graphView.draw(graph)
+
+    XCTAssertEqual(graphView.subviews.count, 6)
+
+    let partyView = graphView.existingNodeView(with: "party")
+    XCTAssertNotNil(partyView)
+    XCTAssertEqual(partyView?.frame.integral, CGRect(x: 8.0, y: 164.0, width: 232.0, height: 30.0))
+
+    let homeView = graphView.existingNodeView(with: "home")
+    XCTAssertNotNil(homeView)
+    XCTAssertEqual(homeView?.frame.integral, CGRect(x: 240.0, y: 115.0, width: 86.0, height: 49.0))
+  }
+
   func test_drawing_dummy_node_graph() {
     let graph = Graph()
 
@@ -92,6 +127,8 @@ final class SwiftFlowTests: XCTestCase {
 
   static var allTests = [
     ("test_drawing_normal_graph", test_drawing_normal_graph),
+    ("test_drawing_graph_with_collision", test_drawing_graph_with_collision),
+    ("test_drawing_dummy_node_graph", test_drawing_dummy_node_graph),
   ]
 
 }
