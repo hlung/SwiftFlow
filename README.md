@@ -107,12 +107,13 @@ We can do it better! 💪
 
 - I use **autolayout** to put the nodes in place. The arrows, on the other hand, are drawn directly using exact coordinates derived from nodes already laid out. The `GraphView` respects `layoutMargins`, so you can adjust outer edge margins with it. 
 
-## Future plans 💡
+## Future ideas 💡
 This project is stil in early stage. Feel free to suggest features and fixes. 🙂
 - allow multiple arrows in same direction
 - add font/fontSize to NodeConfig
 - add bold/italic/underline text
 - add more node shapes
+- dotted arrows?
 - **markdown syntax support** - convert markdown syntax into SwiftFlow code. A very ambitious goal I would say. Not sure if there's a need for this though.
 - **macOS support** - As an iOS developer, I built everything using UIKit. For macOS, those view components and UIBezierPath drawing code has to be translated into AppKit code. I attempted to create [AppKit+UIKit.swift](https://github.com/hlung/SwiftFlow/tree/feature/macos-support/Sources/SwiftFlow/AppKit%2BUIKit) extension that would provide AppKit components with UIKit interface. But I'm stuck at creating UIBezierPath cgPath setter. The code compiles on macOS but doesn't draw anything. You can try to fix in [feature/macos-support](https://github.com/hlung/SwiftFlow/tree/feature/macos-support) branch. So if you need a bigger canvas for the flowchart, just run it on an "iPad Simulator" for now. 😝
 
