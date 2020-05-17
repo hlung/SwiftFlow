@@ -71,6 +71,7 @@ try! graphView.draw(graph)
 - iOS 13 and above
 - I attempted to [support macOS](https://github.com/hlung/SwiftFlow/tree/feature/macos-support), but still doesn't work :(. See more details at the bottom.
 
+### Components
 
 ## Why do you build this?
 
