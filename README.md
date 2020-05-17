@@ -1,23 +1,78 @@
 # SwiftFlow
 
-![demo](https://user-images.githubusercontent.com/652167/81291197-edaba080-909b-11ea-9320-159b535751fd.gif)
-
-
-## Features
 - Draw flowchart in Swift! 🚀
 - Define data in arrays of flow.
 - Live editing (with SwiftUI live preview). 
 - Good for small to medium sized flowcharts.
 - Try out in [example project](https://github.com/hlung/SwiftFlowExample).
 
-## Installation
+## Example
+
+Generate this flow chart:
+
+![output](https://user-images.githubusercontent.com/652167/81291213-f2705480-909b-11ea-9206-f3648cfac730.png)
+
+From this code:
+
+```swift
+import SwiftFlow
+```
+
+```swift
+let graph = Graph()
+
+// setup configs
+var blueConfig = NodeConfig()
+blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00)
+var redConfig = NodeConfig()
+redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00)
+
+graph.nodeConfig = blueConfig
+
+// add flows to graph
+graph.addFlow([
+  Node("Start", shape: .pill),
+  Arrow(.down),
+  Node("Work\nsuccess?", shape: .diamond, id: "success"), // declare id for later reference
+  Arrow(.down, title: "Yes"),
+  Node("Go Party!", shape: .rect, id: "party"),
+  Arrow(.down),
+  Node("End", shape: .pill, id: "end")
+])
+
+graph.addFlow([
+  NodeShortcut(id: "success"), // refers back to the Node above
+  Arrow(.right, title: "No"), // branch out to the right side
+  Node("Cry", shape: .rect, config: redConfig), // different color using config
+  Arrow(.down),
+  Node("Go home", shape: .rect, id: "home"),
+  ArrowLoopBack(from: .bottom, to: .right),
+  NodeShortcut(id: "end")
+])
+
+let graphView = GraphView()
+graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+
+// draw the graph!
+try! graphView.draw(graph)
+```
+
+### Live preview in action with SwiftUI
+
+![demo](https://user-images.githubusercontent.com/652167/81291197-edaba080-909b-11ea-9320-159b535751fd.gif)
+
+## How to use
+
+### Installation
 - Search for "SwiftFlow" library in [Swift Packages](https://developer.apple.com/documentation/xcode/adding_package_dependencies_to_your_app) in Xcode 📦 
 
-## Requirements
+### Requirements
 
 - iOS 13 and above
+- I attempted to [support macOS](https://github.com/hlung/SwiftFlow/tree/feature/macos-support), but still doesn't work :(. See more details at the bottom.
 
-## Story
+
+## Why do you build this?
 
 I often draw a flowchart to help understand some complex logic. It can also serves as a reference document for other engineers and testers.
 To draw one, I usually use popular tools like https://docs.google.com/drawings or https://app.diagrams.net/. 
@@ -53,66 +108,16 @@ At first glance it is very powerful. It can draw not only flowcharts, but may ot
 - In the example project, the `GraphView` is wrapped in SwiftUI's `UIViewRepresentable` type to enable live preview.
 - I use iOS `UIKit` instead of `AppKit` because I'm more familiar with iOS development. It could be rewritten if needed for a macOS app.
 
-## Example
-
-### Input Swift code:
-```swift
-import SwiftFlow
-```
-
-```swift
-let graph = Graph()
-
-var blueConfig = NodeConfig()
-blueConfig.backgroundColor = UIColor(red: 0.81, green: 0.96, blue: 1.00, alpha: 1.00)
-
-var redConfig = NodeConfig()
-redConfig.backgroundColor = UIColor(red: 1.00, green: 0.80, blue: 0.82, alpha: 1.00)
-
-graph.nodeConfig = blueConfig
-
-// setup flows
-graph.addFlow([
-  Node("Start", shape: .pill),
-  Arrow(.down),
-  Node("Work\nsuccess?", shape: .diamond, id: "success"), // declare id for later reference
-  Arrow(.down, title: "Yes"),
-  Node("Go Party!", shape: .rect, id: "party"),
-  Arrow(.down),
-  Node("End", shape: .pill, id: "end")
-])
-
-graph.addFlow([
-  NodeShortcut(id: "success"), // refers back to the Node above
-  Arrow(.right, title: "No"), // branch out to the right side
-  Node("Cry", shape: .rect, config: redConfig), // different color using config
-  Arrow(.down),
-  Node("Go home", shape: .rect, id: "home"),
-])
-
-graph.addFlow([
-  NodeShortcut(id: "home"),
-  ArrowLoopBack(from: .bottom, to: .right),
-  NodeShortcut(id: "end")
-])
-
-let graphView = GraphView()
-graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-
-// Call draw(_:) to draw the flowchart!
-try! graphView.draw(graph)
-```
-
-### Output:
-![output](https://user-images.githubusercontent.com/652167/81291213-f2705480-909b-11ea-9206-f3648cfac730.png)
-
 
 ## Future plans 💡
-This project is stil new. Feel free to suggest features and fixes. 🙂
+This project is stil in early stage. Feel free to suggest features and fixes. 🙂
 - allow multiple arrows in same direction
 - add font/fontSize to NodeConfig
-- markdown syntax parser into SwiftFlow syntax
-- merge arrow heads 🏹
+- add bold/italic/underline text
+- add more node shapes
+- **markdown syntax support** - convert markdown syntax into SwiftFlow code. A very ambitious goal I would say. Not sure if there's a need for this though.
+- **macOS support** - As an iOS developer, I built everything using UIKit. For macOS, those view components and UIBezierPath drawing code has to be translated into AppKit code. I attempted to create [AppKit+UIKit.swift](https://github.com/hlung/SwiftFlow/tree/feature/macos-support/Sources/SwiftFlow/AppKit%2BUIKit) extension that would provide AppKit components with UIKit interface. But I'm stuck at creating UIBezierPath cgPath setter. The code compiles on macOS but doesn't draw anything. You can try to fix in [feature/macos-support](https://github.com/hlung/SwiftFlow/tree/feature/macos-support) branch :P
+
 
 ## Other Notes
 - I know some other library has the same name, like https://github.com/Swift-Kit/Swift-Flow . But I still prefer this name.
