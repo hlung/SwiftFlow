@@ -154,6 +154,8 @@ private final class MarginsLayoutGuide: NSLayoutGuide {
       return NSView.DirectionalEdgeInsets(top: layoutMargins.top, leading: layoutMargins.left, bottom: layoutMargins.bottom, trailing: layoutMargins.right)
     case .rightToLeft:
       return NSView.DirectionalEdgeInsets(top: layoutMargins.top, leading: layoutMargins.left, bottom: layoutMargins.bottom, trailing: layoutMargins.right)
+    @unknown default:
+      fatalError()
     }
   }
 

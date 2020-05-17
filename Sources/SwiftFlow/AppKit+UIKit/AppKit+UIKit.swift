@@ -1,8 +1,7 @@
 import CoreGraphics
 
-#if canImport(UIKit)
-//import UIKit
-#else
+#if canImport(AppKit)
+
 import AppKit
 public typealias UIView = NSView
 public typealias UILabel = NSTextField
@@ -11,26 +10,7 @@ public typealias UIBezierPath = NSBezierPath
 public typealias UIEdgeInsets = NSEdgeInsets
 public typealias UILayoutGuide = NSLayoutGuide
 
-//public class UIView: NSView {
-//  private var _nsuikit_layoutMargins: UIEdgeInsets = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//
-//  var layoutMargins: UIEdgeInsets {
-//    get { _nsuikit_layoutMargins }
-//    set { _nsuikit_layoutMargins = newValue }
-//  }
-//
-//  public override var alignmentRectInsets: NSEdgeInsets {
-//    _nsuikit_layoutMargins
-//  }
-//}
-
 extension UIView {
-//  var layoutMarginsGuide: NSLayoutGuide {
-//    layoutGuides.first ?? NSLayoutGuide()
-////    get { layoutGuides.first ?? NSLayoutGuide() }
-////    set { addLayoutGuide(newValue) }
-//  }
-
   @objc func layoutSubviews() {
     layout()
   }
@@ -64,10 +44,9 @@ extension UILabel {
     set { alignment = newValue }
   }
 
-  // TODO: fix
   var numberOfLines: Int {
-    get { 0 }
-    set {  }
+    get { usesSingleLineMode ? 1 : 0 }
+    set { usesSingleLineMode = newValue == 1 }
   }
 }
 
@@ -156,4 +135,5 @@ extension UIBezierPath {
 //  }
 
 }
+
 #endif
