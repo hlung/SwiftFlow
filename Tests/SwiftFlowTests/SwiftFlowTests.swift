@@ -2,7 +2,8 @@ import XCTest
 @testable import SwiftFlow
 
 final class SwiftFlowTests: XCTestCase {
-  func testExample() {
+
+  func test_drawing_normal_graph() {
     let graph = Graph()
 
     graph.addFlow([
@@ -29,7 +30,11 @@ final class SwiftFlowTests: XCTestCase {
       NodeShortcut(id: "end")
     ])
 
-    XCTAssertEqual(graph.flows.count, 3)
+    // add empty flow should not affect the output
+    graph.addFlow([
+    ])
+
+    XCTAssertEqual(graph.flows.count, 4)
     XCTAssertEqual(graph.flows[0].count, 7)
     XCTAssertEqual(graph.flows[1].count, 5)
     XCTAssertEqual(graph.flows[2].count, 3)
@@ -60,7 +65,33 @@ final class SwiftFlowTests: XCTestCase {
     XCTAssertNil(notExistingView)
   }
 
+  func test_drawing_dummy_node_graph() {
+    let graph = Graph()
+
+    graph.addFlow([
+      Node("Start", shape: .pill, id: "start"),
+      Arrow(.up),
+    ])
+
+    XCTAssertEqual(graph.flows.count, 1)
+    XCTAssertEqual(graph.flows[0].count, 2)
+
+    let graphView = GraphView()
+    try! graphView.draw(graph)
+
+    XCTAssertEqual(graphView.subviews.count, 2)
+
+    let startView = graphView.existingNodeView(with: "start")
+    XCTAssertNotNil(startView)
+    XCTAssertEqual(startView?.frame.integral, CGRect(x: 7.0, y: 58.0, width: 57.0, height: 30.0))
+
+    let dummyNodeView = graphView.subviews[1]
+    XCTAssertNotNil(dummyNodeView)
+    XCTAssertEqual(dummyNodeView.frame.integral, CGRect(x: 26.0, y: 8.0, width: 20.0, height: 10.0))
+  }
+
   static var allTests = [
-    ("testExample", testExample),
+    ("test_drawing_normal_graph", test_drawing_normal_graph),
   ]
+
 }

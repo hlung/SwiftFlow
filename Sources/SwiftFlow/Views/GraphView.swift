@@ -23,7 +23,7 @@ public class GraphView: UIView {
     var constraints: [NSLayoutConstraint] = []
 
     for flow in graph.flows {
-      guard !flow.isEmpty else { return }
+      guard !flow.isEmpty else { break }
 
       var flow = flow
       var savedNodeView: NodeView
