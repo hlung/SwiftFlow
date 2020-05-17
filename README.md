@@ -56,7 +56,7 @@ graph.addFlow([
 let graphView = GraphView()
 graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 
-// render the graph!
+// draw the graph!
 try! graphView.draw(graph)
 ```
 
