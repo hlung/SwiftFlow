@@ -3,17 +3,18 @@
 ![logo](https://user-images.githubusercontent.com/652167/82144157-36701000-9879-11ea-94f4-eb576f007c4d.png)
 
 - Draw flowchart in Swift! ðŸš€
-- Define data in arrays of flow.
-- Live editing (with SwiftUI live preview). 
-- Good for small to medium sized flowcharts.
-- Try out in [example project](https://github.com/hlung/SwiftFlowExample).
+- Define data in flow arrays
+- Everything is aligned automatically with autolayout
+- Live editing (by SwiftUI live preview)
+- Try it out in [example project](https://github.com/hlung/SwiftFlowExample)
 
+![demo](https://user-images.githubusercontent.com/652167/82152746-fbc8a080-9895-11ea-82dd-59316491a9a4.gif)
 
 ## Example
 
 Generate this flow chart:
 
-![demo](https://user-images.githubusercontent.com/652167/82152746-fbc8a080-9895-11ea-82dd-59316491a9a4.gif)
+![output](https://user-images.githubusercontent.com/652167/81291213-f2705480-909b-11ea-9206-f3648cfac730.png)
 
 From this code:
 
@@ -59,12 +60,6 @@ graphView.layoutMargins = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
 // draw the graph!
 try! graphView.draw(graph)
 ```
-
-### Live preview in action with SwiftUI
-
-![demo](https://user-images.githubusercontent.com/652167/81291197-edaba080-909b-11ea-9320-159b535751fd.gif)
-
-* I'm actually wrapping `GraphView` in a SwiftUI's `UIViewRepresentable` type to enable live preview. While it is not the best way and fails sometimes, it usually can generate live preview after you make small changes.
 
 ## How to use
 
@@ -122,6 +117,10 @@ This project is stil in early stage. Feel free to suggest features and fixes. ðŸ
 
 
 ## Other Notes
+
+### About live preview
+
+- In the live preview demo, I'm actually just wrapping `GraphView` in a SwiftUI's `UIViewRepresentable` type. While it is not the most optimized way, I think it is good enough for general use.
 
 ### The name
 
