@@ -28,6 +28,9 @@ public class GraphView: UIView {
       layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: nodeView.rightAnchor),
     ])
   }
+}
+
+extension GraphView {
 
   /// Where the magic happens ✨
   func draw(_ graph: Graph) throws {
