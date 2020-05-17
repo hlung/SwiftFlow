@@ -3,6 +3,7 @@ import UIKit
 public struct NodeConfig {
   public var backgroundColor: UIColor = .clear
   public var borderColor: UIColor = .black
+  /// Distance from the edges of other nodes
   public var edgeOffsets = EdgeOffsets(allSides: 20)
 
   public init() {}

@@ -1,5 +1,6 @@
 import Foundation
 
+/// Each rectangle / other shapes boxes you see are backed by this type.
 public struct Node: GraphElement, CustomStringConvertible {
   public let title: String
   public let shape: NodeShape
@@ -23,6 +24,7 @@ public struct Node: GraphElement, CustomStringConvertible {
 
 struct DummyNode: GraphElement {}
 
+///  A way to refer to an *existing* Node by `id`.
 public struct NodeShortcut: GraphElement, CustomStringConvertible {
   public let id: String
 

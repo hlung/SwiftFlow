@@ -1,5 +1,6 @@
 import UIKit
 
+/// For chaining nodes together side-by-side. It has `direction` property for telling which way the arrow is pointing out from a node. You can also add annotations to it.
 public struct Arrow: GraphElement, ArrowProviding, CustomStringConvertible {
   /// The direction to add the next node
   public let direction: Direction
@@ -19,6 +20,7 @@ public struct Arrow: GraphElement, ArrowProviding, CustomStringConvertible {
   }
 }
 
+/// Similar to Arrow, but it also support drawing an **angled** arrow to go around existing nodes, typically for looping back to an existing node above. It can be used for linking further away nodes that would look nicer using an angled arrow than a straight one.
 public struct ArrowLoopBack: GraphElement, ArrowProviding, CustomStringConvertible {
   /// The side of start node which arrow will start
   public let direction: Direction

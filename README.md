@@ -62,6 +62,7 @@ try! graphView.draw(graph)
 
 ![demo](https://user-images.githubusercontent.com/652167/81291197-edaba080-909b-11ea-9320-159b535751fd.gif)
 
+* I'm actually wrapping `GraphView` in a SwiftUI's `UIViewRepresentable` type to enable live preview. While it is not the best way and fails sometimes, it usually can generate live preview after you make small changes.
 
 ## How to use
 
@@ -73,7 +74,6 @@ try! graphView.draw(graph)
 - iOS 13 and above
 - I attempted to [support macOS](https://github.com/hlung/SwiftFlow/tree/feature/macos-support), but still doesn't work :(. See more details at the bottom.
 
-### Components
 
 ## Why do you build this?
 
@@ -88,20 +88,24 @@ Moreover, with the new SwiftUI, we can see **live previews** of the flowchart as
 We can do it better! 💪
 
 
-## Design
+## Components ✍️
 
-### Data modeling
+### Models
 
-- At top level, we have a `GraphView` that takes a `Graph` object which holds all information about the flowchart.
-- We set up the `Graph` by adding arrays of `GraphElement` conformed types, which includes `Node`, `NodeShortcut`, and `Arrow`.
-- Each `Node` can be customized using `NodeConfig`, like background and border color.
+- `Node` - Each rectangle / other shapes boxes you see are backed by this type.
+- `NodeShortcut` - A way to refer to an *existing* Node by `id`.
+- `Arrow` - For chaining nodes together side-by-side. It has `direction` property for telling which way the arrow is pointing out from a node. You can also add annotations to it.
+- `ArrowLoopBack` - Similar to Arrow, but it also support drawing an **angled** arrow to go around existing nodes, typically for looping back to an existing node above. It can be used for linking further away nodes that would look nicer using an angled arrow than a straight one.
+- `NodeConfig` - For customizing a Node properties like background color / border color / distance from other nodes. A `Graph` can also take this property to apply to all nodes.
+- `ArrowConfig` - For customizing an Arrow. 
+- `GraphElement` - A protocol that all above types conforms to.
+- `Graph` - This is the central piece that holds all information on how to draw the flowchart. 
+  - You call `addFlow(_:)` which takes `[GraphElement]`. Typically, the array be a sequence of "`Node`, `Arrow`, `Node`, `Arrow`, ...".
+  - Finally, you pass this type into `GraphView` and call `graphView.draw(graph)` to draw the view.
 
 ### Layout
 
-- I use **autolayout** to put the nodes in place. The arrows, on the other hand, are drawn directly using exact coordinates derived from nodes already laid out.
-- In the example project, the `GraphView` is wrapped in SwiftUI's `UIViewRepresentable` type to enable live preview.
-- I use iOS `UIKit` instead of `AppKit` because I'm more familiar with iOS development. It could be rewritten if needed for a macOS app.
-
+- I use **autolayout** to put the nodes in place. The arrows, on the other hand, are drawn directly using exact coordinates derived from nodes already laid out. The `GraphView` respects `layoutMargins`, so you can adjust outer edge margins with it. 
 
 ## Future plans 💡
 This project is stil in early stage. Feel free to suggest features and fixes. 🙂
@@ -110,7 +114,7 @@ This project is stil in early stage. Feel free to suggest features and fixes. �
 - add bold/italic/underline text
 - add more node shapes
 - **markdown syntax support** - convert markdown syntax into SwiftFlow code. A very ambitious goal I would say. Not sure if there's a need for this though.
-- **macOS support** - As an iOS developer, I built everything using UIKit. For macOS, those view components and UIBezierPath drawing code has to be translated into AppKit code. I attempted to create [AppKit+UIKit.swift](https://github.com/hlung/SwiftFlow/tree/feature/macos-support/Sources/SwiftFlow/AppKit%2BUIKit) extension that would provide AppKit components with UIKit interface. But I'm stuck at creating UIBezierPath cgPath setter. The code compiles on macOS but doesn't draw anything. You can try to fix in [feature/macos-support](https://github.com/hlung/SwiftFlow/tree/feature/macos-support) branch :P
+- **macOS support** - As an iOS developer, I built everything using UIKit. For macOS, those view components and UIBezierPath drawing code has to be translated into AppKit code. I attempted to create [AppKit+UIKit.swift](https://github.com/hlung/SwiftFlow/tree/feature/macos-support/Sources/SwiftFlow/AppKit%2BUIKit) extension that would provide AppKit components with UIKit interface. But I'm stuck at creating UIBezierPath cgPath setter. The code compiles on macOS but doesn't draw anything. You can try to fix in [feature/macos-support](https://github.com/hlung/SwiftFlow/tree/feature/macos-support) branch. So if you need a bigger canvas for the flowchart, just run it on an "iPad Simulator" for now. 😝
 
 
 ## Other Notes
