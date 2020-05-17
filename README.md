@@ -111,6 +111,7 @@ We can do it better! 💪
 
 ## Future ideas 💡
 This project is stil in early stage. Feel free to suggest features and fixes. 🙂
+- export as image file
 - allow multiple arrows in same direction
 - add font/fontSize to NodeConfig
 - add bold/italic/underline text
