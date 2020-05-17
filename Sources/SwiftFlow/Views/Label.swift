@@ -5,6 +5,14 @@ import AppKit
 #endif
 
 class Label: UILabel {
+
+//  #if canImport(AppKit)
+//  var text: String? {
+//    get { self.string }
+//    set { self.string = newValue ?? "" }
+//  }
+//  #endif
+
   public init(_ text: String) {
     super.init(frame: .zero)
     self.text = text

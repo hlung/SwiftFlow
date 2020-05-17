@@ -5,7 +5,7 @@ import CoreGraphics
 #else
 import AppKit
 public typealias UIView = NSView
-public typealias UILabel = NSText
+public typealias UILabel = NSTextField
 public typealias UIColor = NSColor
 public typealias UIBezierPath = NSBezierPath
 public typealias UIEdgeInsets = NSEdgeInsets
@@ -55,8 +55,8 @@ extension UIView {
 
 extension UILabel {
   var text: String? {
-    get { string }
-    set { string = newValue ?? "" }
+    get { stringValue }
+    set { stringValue = newValue ?? "" }
   }
 
   var textAlignment: NSTextAlignment {
