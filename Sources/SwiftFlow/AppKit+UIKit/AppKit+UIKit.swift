@@ -74,54 +74,61 @@ extension UIBezierPath {
       return path
     }
     set {
-      // TODO: https://gist.github.com/lukaskubanek/1f3585314903dfc66fc7
-//      let path = newValue
-//      let pathPtr = UnsafeMutablePointer<NSBezierPath>.allocate(capacity: 1)
-//      pathPtr.initialize(to: self)
-//
-//      let infoPtr = UnsafeMutableRawPointer(pathPtr)
-//
-//      // I hope the CGPathApply call manages the deallocation of the pointers passed to the applier
-//      // function, but I'm not sure.
-//      path.apply(info: infoPtr) { (infoPtr, elementPtr) -> Void in
-//        let path = UnsafeMutableRawPointer(infoPtr)?.bindMemory(to: <#T##T.Type#>, capacity: <#T##Int#>)
-//        let element = elementPtr.memory
-//
-//        let pointsPtr = element.points
-//
-//        switch element.type {
-//        case .MoveToPoint:
-//          path.moveToPoint(pointsPtr.memory)
-//
-//        case .AddLineToPoint:
-//          path.lineToPoint(pointsPtr.memory)
-//
-//        case .AddQuadCurveToPoint:
-//          let firstPoint = pointsPtr.memory
-//          let secondPoint = pointsPtr.successor().memory
-//
-//          let currentPoint = path.currentPoint
-//          let x = (currentPoint.x + 2 * firstPoint.x) / 3
-//          let y = (currentPoint.y + 2 * firstPoint.y) / 3
-//          let interpolatedPoint = CGPoint(x: x, y: y)
-//
-//          let endPoint = secondPoint
-//
-//          path.curveToPoint(endPoint, controlPoint1: interpolatedPoint, controlPoint2: interpolatedPoint)
-//
-//        case .AddCurveToPoint:
-//          let firstPoint = pointsPtr.memory
-//          let secondPoint = pointsPtr.successor().memory
-//          let thirdPoint = pointsPtr.successor().successor().memory
-//
-//          path.curveToPoint(thirdPoint, controlPoint1: firstPoint, controlPoint2: secondPoint)
-//
-//        case .CloseSubpath:
-//          path.closePath()
-//        }
-//
-//        pointsPtr.destroy()
-//      }
+      let path = newValue
+
+      // From: https://gist.github.com/lukaskubanek/1f3585314903dfc66fc7
+
+      let pathPtr = UnsafeMutablePointer<NSBezierPath>.allocate(capacity: 1)
+      pathPtr.initialize(to: self)
+
+      let infoPtr = UnsafeMutableRawPointer(pathPtr)
+
+      // I hope the CGPathApply call manages the deallocation of the pointers passed to the applier
+      // function, but I'm not sure.
+      path.apply(info: infoPtr) { (infoPtr, elementPtr) -> Void in
+        let path = infoPtr!.load(as: NSBezierPath.self)
+        let element = UnsafeMutableRawPointer(mutating: elementPtr).load(as: CGPathElement.self)
+
+        let pointsPtr = UnsafeMutableRawPointer(mutating: element.points)
+        let point = pointsPtr.load(as: CGPoint.self)
+
+        switch element.type {
+        case .moveToPoint:
+          path.move(to: point)
+
+        case .addLineToPoint:
+          path.line(to: point)
+
+        case .addQuadCurveToPoint:
+          let firstPoint = point
+          let secondPoint = pointsPtr.successor().load(as: CGPoint.self)
+
+          let currentPoint = path.currentPoint
+          let x = (currentPoint.x + 2 * firstPoint.x) / 3
+          let y = (currentPoint.y + 2 * firstPoint.y) / 3
+          let interpolatedPoint = CGPoint(x: x, y: y)
+
+          let endPoint = secondPoint
+
+          path.curve(to: endPoint, controlPoint1: interpolatedPoint, controlPoint2: interpolatedPoint)
+
+        case .addCurveToPoint:
+          let firstPoint = point
+          let secondPoint = pointsPtr.successor().load(as: CGPoint.self)
+          let thirdPoint = pointsPtr.successor().successor().load(as: CGPoint.self)
+
+          path.curve(to: thirdPoint, controlPoint1: firstPoint, controlPoint2: secondPoint)
+
+        case .closeSubpath:
+          path.close()
+
+        @unknown default:
+          break
+        }
+
+//        pointsPtr.deallocate()
+      }
+
     }
   }
 
