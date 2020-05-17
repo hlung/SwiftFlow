@@ -87,7 +87,7 @@ class NodeView: UIView {
   }
 
   public override var description: String {
-    return "[NodeView frame = \(frame), subviews = \(subviews)]"
+    return "[NodeView frame = \(frame.integral), subviews = \(subviews)]"
   }
 
   override var intrinsicContentSize: CGSize {

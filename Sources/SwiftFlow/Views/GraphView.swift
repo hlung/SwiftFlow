@@ -68,9 +68,8 @@ public class GraphView: UIView {
           let offset = EdgeOffsets.distance(from: savedNodeView.config.edgeOffsets,
                                             to: nodeView.config.edgeOffsets,
                                             direction: arrow.direction)
-          constraints += savedNodeView.constraints(direction: arrow.direction,
-                                                   to: nodeView,
-                                                   offset: offset)
+          constraints += savedNodeView
+            .constraints(direction: arrow.direction, to: nodeView, offset: offset)
 
           let plan = ArrowDrawingPlan(startView: savedNodeView,
                                       endView: nodeView,
@@ -103,9 +102,8 @@ public class GraphView: UIView {
           let offset = EdgeOffsets.distance(from: savedNodeView.config.edgeOffsets,
                                             to: nodeView.config.edgeOffsets,
                                             direction: arrow.direction)
-          constraints += savedNodeView.constraints(direction: arrow.direction,
-                                                   to: nodeView,
-                                                   offset: offset)
+          constraints += savedNodeView
+            .constraints(direction: arrow.direction, to: nodeView, offset: offset)
 
           let plan = ArrowDrawingPlan(startView: savedNodeView,
                                       endView: nodeView,
@@ -118,6 +116,14 @@ public class GraphView: UIView {
 
     NSLayoutConstraint.activate(constraints)
     self.layoutIfNeeded()
+
+    // fix collisions
+    let anotherConstraints = collisionAvoidingConstraints()
+    if !anotherConstraints.isEmpty {
+      NSLayoutConstraint.activate(anotherConstraints)
+      self.setNeedsLayout() // we already did one layoutIfNeeded(), so need to set again
+      self.layoutIfNeeded()
+    }
 
     // --- arrows ---
     // We are not using autolayout for the arrows.
@@ -135,6 +141,40 @@ public class GraphView: UIView {
       layoutMarginsGuide.bottomAnchor.constraint(greaterThanOrEqualTo: nodeView.bottomAnchor),
       layoutMarginsGuide.rightAnchor.constraint(greaterThanOrEqualTo: nodeView.rightAnchor),
     ])
+  }
+
+  private func collisionAvoidingConstraints() -> [NSLayoutConstraint] {
+    var collisionAvoidingConstraints: [NSLayoutConstraint] = []
+
+    if self.subviews.count > 1 {
+      for i in 0..<self.subviews.count {
+        let viewOne = self.subviews[i]
+
+        for j in i+1..<self.subviews.count {
+          let viewTwo = self.subviews[j]
+
+          if viewOne.frame.intersects(viewTwo.frame) {
+            // Note: we adjust both x and y axis to avoid later arrow drawing collision
+            // print("viewOne: \(viewOne)\nviewTwo: \(viewTwo)")
+
+            if viewOne.center.x < viewTwo.center.x {
+              collisionAvoidingConstraints += [viewOne.rightAnchor.constraint(equalTo: viewTwo.leftAnchor, constant: 0)]
+            }
+            else {
+              collisionAvoidingConstraints += [viewTwo.rightAnchor.constraint(equalTo: viewOne.leftAnchor, constant: 0)]
+            }
+
+            if viewOne.center.y < viewTwo.center.y {
+              collisionAvoidingConstraints += [viewOne.bottomAnchor.constraint(lessThanOrEqualTo: viewTwo.topAnchor, constant: 0)]
+            }
+            else {
+              collisionAvoidingConstraints += [viewTwo.bottomAnchor.constraint(lessThanOrEqualTo: viewOne.topAnchor, constant: 0)]
+            }
+          }
+        }
+      }
+    }
+    return collisionAvoidingConstraints
   }
 
   private func addArrow(_ plan: ArrowDrawingPlan, defaultConfig: ArrowConfig) {
