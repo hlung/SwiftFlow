@@ -1,9 +1,10 @@
 ![logo](https://user-images.githubusercontent.com/652167/82144157-36701000-9879-11ea-94f4-eb576f007c4d.png)
 
 - Draw flowchart in Swift! 🚀
+- Built on simple UIKit + NSLayoutConstraint
 - Define data in flow arrays
 - Everything is aligned automatically with autolayout
-- Live editing (by SwiftUI live preview)
+- Live editing (by SwiftUI `PreviewProvider`)
 - Try it out in [example project](https://github.com/hlung/SwiftFlowExample)
 
 ![demo](https://user-images.githubusercontent.com/652167/82152746-fbc8a080-9895-11ea-82dd-59316491a9a4.gif)
