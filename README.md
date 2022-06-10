@@ -105,6 +105,7 @@ We can do it better! 💪
 
 ## Future ideas 💡
 This project is stil in early stage. Feel free to suggest features and fixes. 🙂
+- improve syntax using [result builders](https://www.swiftbysundell.com/articles/deep-dive-into-swift-function-builders/)
 - export as image file
 - allow multiple arrows in same direction
 - add font/fontSize to NodeConfig
