@@ -132,7 +132,7 @@ I know some other library has the same name, like https://github.com/Swift-Kit/S
 There is a JavaScript library for drawing flowchart in code called **mermaid**. (There's a [live editor](https://mermaid-js.github.io/mermaid-live-editor) you can try.)
 At first glance it is very powerful. It can draw not only flowcharts, but may other types of diagrams. But I find there are some problems for drawing flowchart...
 
-- **Node duplication** - The syntax is **link**-based, meaning each declaration includes 2 nodes and 1 arrow ( `A --> B`, `B --> C`, `C --> D` ). In a long flowchart, most nodes will appear  twice (`B` and `C`), which is very redundant. This won't happen if the syntax is **flow** based ( `A --> B --> C --> D` ) because most nodes will be referenced only once, except at the intersections. I think using **flow**-based syntax is cleaner and faster to write.
+- **Node duplication** - The syntax is **pair**-based, meaning each declaration includes 2 nodes and 1 arrow ( `A --> B`, `B --> C`, `C --> D` ). In a long flowchart, most nodes will appear  twice (`B` and `C`), which is very redundant. This won't happen if the syntax is **flow** based ( `A --> B --> C --> D` ) because most nodes will be referenced only once, except at the intersections. I think using **flow**-based syntax is cleaner and faster to write.
 - **Ugly new line** - Need to use `<br />` 😫. I could just be `\n`.
 - **Arrow is long** - It uses `-->` for an arrow. It could have been just `->` or `>`. This adds up with the link-based syntax mentioned.
 - **Cannot specify arrow direction** - The graph declaration at the top dictates the arrow direction, e.g. `graph TD` means going from "top to bottom".
